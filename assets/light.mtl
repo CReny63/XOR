@@ -1,0 +1,5 @@
+newmtl LightMaterial
+Ka 1.0 1.0 1.0  # Ambient color
+Kd 1.0 1.0 1.0  # Diffuse color
+Ks 0.0 0.0 0.0  # Specular color
+map_Kd light_texture.png  # Texture file for the light

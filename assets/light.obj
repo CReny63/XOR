@@ -1,0 +1,9 @@
+# Light Source Placeholder
+o Light
+v 0.0 0.0 0.0  # Center
+v 0.1 0.0 0.0  # Right
+v 0.0 0.1 0.0  # Top
+v 0.0 0.0 0.1  # Front
+
+# Faces of the small sphere (represented as a single point)
+f 1 2 3 4
