@@ -1,5 +1,7 @@
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart'; //to fetch real world time
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +13,15 @@ import 'theme_provider.dart';
 import 'notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart'; //fetch qr code api
+import 'location.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -216,30 +222,33 @@ void _showQRCodeModal(
 void _showSettingsMenu(BuildContext context) {
   showMenu(
     context: context,
-    position: const RelativeRect.fromLTRB(
-        0, 100, 0, 0), // Adjust the position as needed
+    position: const RelativeRect.fromLTRB(0, 100, 0, 0),
     items: <PopupMenuEntry<String>>[
       const PopupMenuItem<String>(
         value: 'Help',
-        child: Text('Help'),
+        child: Text('Help', style: TextStyle(color: Colors.white)),
       ),
       const PopupMenuItem<String>(
         value: 'Change Username',
-        child: Text('Change Username'),
+        child: Text('Change Username', style: TextStyle(color: Colors.white)),
       ),
       const PopupMenuItem<String>(
         value: 'Instagram Handle',
-        child: Text('Instagram Handle'),
+        child: Text('Instagram Handle', style: TextStyle(color: Colors.white)),
       ),
       const PopupMenuItem<String>(
         value: 'Rate Us on App Store',
-        child: Text('Rate Us on App Store'),
+        child:
+            Text('Rate Us on App Store', style: TextStyle(color: Colors.white)),
       ),
       const PopupMenuItem<String>(
         value: 'Logout',
-        child: Text('Logout'),
+        child: Text('Logout', style: TextStyle(color: Colors.white)),
       ),
     ],
+    // Set the background color for the entire menu
+    color: Colors.blueGrey[800], // Change this to your desired color
+    elevation: 8,
   ).then((value) {
     if (value != null) {
       switch (value) {
@@ -250,18 +259,10 @@ void _showSettingsMenu(BuildContext context) {
           // Handle change username pressed
           break;
         case 'Logout':
-          // Handle logout pressed
-          // Navigator.pushReplacement(
-          //   //making sure user cannot go back
-          //   context,
-          //   MaterialPageRoute(builder: (context) => const LoginPage()),
-          // );
           break;
         case 'Rate Us on App Store':
-          // Handle rate us on app store pressed
           break;
         case 'Instagram Handle':
-          // Handle Instagram handle pressed
           break;
       }
     }
@@ -379,50 +380,105 @@ class AppBarContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the current theme mode from ThemeProvider
+    //final locationProvider = Provider.of<LocationProvider>(context);
 
-    return Container(
-      color: Theme.of(context)
-          .appBarTheme
-          .backgroundColor, // Use the appBar's background color
-      padding:
-          const EdgeInsets.symmetric(horizontal: 12), // Optional: Add padding
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: Icon(Icons.menu,
-                size: 13,
-                color: Theme.of(context).appBarTheme.iconTheme?.color),
-            onPressed: () {
-              _showSettingsMenu(context);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.coffee,
-                size: 13, color: Theme.of(context).appBarTheme.backgroundColor),
-            onPressed: () {
-              // Add your custom action here
-            },
-          ),
-          GestureDetector(
-            onTap: () {
-              // Toggle between light and dark mode
-              // You will need to access your `toggleTheme` callback passed into `ProfilePage`
-              final themeProvider =
-                  Provider.of<ThemeProvider>(context, listen: false);
-              themeProvider.toggleTheme();
-            },
-            child: IconButton(
-              icon: Icon(Icons.settings_accessibility_outlined,
-                  size: 13,
-                  color: Theme.of(context).appBarTheme.backgroundColor),
-              onPressed: () {
-                _showSettingsMenu(context);
-              },
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: const Text('Home'),
+      //   actions: [
+      //     IconButton(
+      //       icon: Icon(
+      //         Icons.settings_accessibility_outlined,
+      //         color: Theme.of(context).appBarTheme.iconTheme?.color,
+      //       ),
+      //       onPressed: () {
+      //         final themeProvider =
+      //             Provider.of<ThemeProvider>(context, listen: false);
+      //         themeProvider.toggleTheme();
+      //       },
+      //     ),
+      //   ],
+      // ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Container(
+              color: Theme.of(context).appBarTheme.backgroundColor,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 12), // Optional: Add padding
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.menu,
+                        size: 13,
+                        color: Theme.of(context).appBarTheme.iconTheme?.color),
+                    onPressed: () {
+                      _showSettingsMenu(context);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.coffee,
+                        size: 13,
+                        color: Theme.of(context).appBarTheme.iconTheme?.color),
+                    onPressed: () {
+                      // Add your custom action here
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      final themeProvider =
+                          Provider.of<ThemeProvider>(context, listen: false);
+                      themeProvider.toggleTheme();
+                    },
+                    child: IconButton(
+                      icon: Icon(Icons.settings_accessibility_outlined,
+                          size: 13,
+                          color:
+                              Theme.of(context).appBarTheme.iconTheme?.color),
+                      onPressed: () {
+                        _showSettingsMenu(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            // const SizedBox(height: 4.0),
+            // TextField(
+            //   decoration: const InputDecoration(
+            //     labelText: 'Enter city or zipcode',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   onChanged: (value) {
+            //     locationProvider.setLocation(value);
+            //   },
+            // ),
+            // const SizedBox(height: 16.0),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     locationProvider.fetchLocation();
+            //   },
+            //   child: const Text('Show Map'),
+            // ),
+            // const SizedBox(height: 16.0),
+            // Expanded(
+            //   child: locationProvider.hasMapController
+            //       ? const Center(child: Text('Enter a location to see the map'))
+            //       : GoogleMap(
+            //           initialCameraPosition: CameraPosition(
+            //             target: locationProvider.initialPosition,
+            //             zoom: 14.0,
+            //           ),
+            //           onMapCreated: (controller) {
+            //             locationProvider.hasMapController;
+            //           },
+            //           markers: locationProvider.markers,
+            //         ),
+            // ),
+          ],
+        ),
       ),
     );
   }
