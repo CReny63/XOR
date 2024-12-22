@@ -8,11 +8,10 @@ Determines a users location and presents them with local boba shops in a nearby 
    ```bash
    git clone https://github.com/your-username/your-repo.git
    
-2. Install dependencies
-   flutter pub get
+2. flutter pub get (Install dependencies)
 
-3. flutter run
+3. flutter run (run program & select platform)
 
-4. Shift + R to perfrom hot restart when coding.
+4. Shift + R (hot restart when coding)
 
-5. flutter clean (after each run)
+5. flutter clean (when finished)
