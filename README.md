@@ -1,6 +1,6 @@
-# meta_verse
+# BOBA_APP
 
-A new Flutter project.
+Determine a users location and present them with local boba shops nearby. As the user orders as they would and scans the QR code (in store) they are rewarded for each unique store they visit. Bringing more business to competing stores and giving the consumer a new way to enjoy their favorite drink!
 
 ## Getting Started
 
