@@ -35,7 +35,11 @@ dependencies:
   provider: ^6.0.0 #theme provider for whole app
   google_maps_flutter: ^2.0.6
   geocoding: ^2.0.4
-
+  image_picker: ^0.8.5+3 # Make sure to use the latest version
+  hive: ^2.0.4    # Add this line for Hive
+  hive_flutter: ^1.1.0  # This adds Flutter integration support
+  path_provider: ^2.0.3  # This helps to get the correct file paths for storing data
+  shared_preferences: ^2.0.10
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   #cupertino_icons: ^1.0.2
@@ -47,6 +51,8 @@ dev_dependencies:
   qr_flutter: ^4.1.0
   intl: ^0.17.0
   carousel_slider: ^4.0.0
+  hive_generator: ^1.1.1  # For generating TypeAdapters
+  build_runner: ^2.1.5  # For running code generation commands
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

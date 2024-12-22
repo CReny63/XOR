@@ -1,12 +1,14 @@
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
+//import 'package:geocoding/geocoding.dart';
+//import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart'; //to fetch real world time
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
-import '3d_object.dart';
+//import '3d_object.dart';
+import 'login.dart';
 import 'profile.dart';
 import 'reviews.dart';
 import 'theme_provider.dart';
@@ -14,8 +16,20 @@ import 'notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart'; //fetch qr code api
 import 'location.dart';
+import 'splash.dart';
+import 'hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'chatbot.dart';
 
-void main() {
+Future<void> main() async {
+  // Ensure that Flutter bindings are initialized before using Hive
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Hive and HiveStorage before running the app
+  await Hive.initFlutter();
+  await HiveStorage.initHive(); // Make sure the HiveStorage class initializes the box
+
+  // Now run the app
   runApp(
     MultiProvider(
       providers: [
@@ -26,6 +40,11 @@ void main() {
     ),
   );
 }
+
+
+
+
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -77,30 +96,75 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return MaterialApp(
-          theme: themeProvider.currentTheme,
-          routes: {
-            '/review': (context) => const ReviewsPage(),
-            '/notifications': (context) => const NotificationsPage(),
-            '/profile': (context) => ProfilePage(
-                  toggleTheme: themeProvider.toggleTheme,
-                  isDarkMode: themeProvider.isDarkMode,
-                ),
-          },
-          debugShowCheckedModeBanner: false,
-          home: HomePage(
+@override
+Widget build(BuildContext context) {
+  return Consumer<ThemeProvider>(
+    builder: (context, themeProvider, child) {
+      return MaterialApp(
+        theme: themeProvider.currentTheme,
+        initialRoute: '/splash', // Start at login page
+        routes: {
+          '/splash': (context) => const SplashScreen(),
+          '/login': (context) => LoginPage(
+            themeProvider: ThemeProvider(),
+          ),
+          '/main': (context) => HomePage(
             toggleTheme: themeProvider.toggleTheme,
             isDarkMode: themeProvider.isDarkMode,
           ),
-        );
-      },
-    );
-  }
+          '/review': (context) => const ReviewsPage(),
+          '/notifications': (context) => const NotificationsPage(),
+          '/profile': (context) => ProfilePage(
+            toggleTheme: themeProvider.toggleTheme,
+            isDarkMode: themeProvider.isDarkMode,
+          ),
+        },
+        debugShowCheckedModeBanner: false,
+        // Set the home as Scaffold to include floating action button
+        home: Scaffold(
+          appBar: AppBar(title: const Text('Home Page')),
+          body: HomePage(
+            toggleTheme: themeProvider.toggleTheme,
+            isDarkMode: themeProvider.isDarkMode,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // Trigger chatbot popup
+              showDialog(
+                context: context,
+                builder: (context) => ChatbotPopup(),
+              );
+            },
+            child: const Icon(Icons.chat),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+      );
+    },
+  );
 }
+
+
+}
+
+
+    // return Scaffold(
+    //   body: Center(
+    //     child: Text("This is another page."),
+    //   ),
+    //   floatingActionButton: FloatingActionButton(
+    //     onPressed: () {
+    //       // Trigger chatbot popup
+    //       showDialog(
+    //         context: context,
+    //         builder: (context) => ChatbotPopup(),
+    //       );
+    //     },
+    //     child: const Icon(Icons.chat),
+    //     backgroundColor: Colors.blue,
+    //   ),
+    // );
+ 
 
 class BobaStores {
   late String name;
@@ -746,11 +810,11 @@ class _HomePageState extends State<HomePage> {
                               height:
                                   10), // Space between scroll view and 3D object
                           // 3D object
-                          const SizedBox(
-                            height: 400, // Specify height
-                            width: 400, // Specify width
-                            child: SimpleCube(),
-                          ),
+                          // const SizedBox(
+                          //   height: 400, // Specify height
+                          //   width: 400, // Specify width
+                          //   child: SimpleCube(),
+                          // ),
                         ],
                       ),
 
