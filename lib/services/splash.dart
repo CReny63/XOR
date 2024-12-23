@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'user_admin_page.dart'; // Import the User/Admin Selection Page
+import '../models/user_admin_page.dart'; // Import the User/Admin Selection Page
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);

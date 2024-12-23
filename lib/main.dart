@@ -3,23 +3,26 @@ import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
 //import 'package:geocoding/geocoding.dart';
 //import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart'; //to fetch real world time
+//import 'package:intl/intl.dart'; //to fetch real world time
 import 'package:flutter/material.dart';
+import 'package:meta_verse/models/bottom_bar.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 //import '3d_object.dart';
+import 'widgets/Greeting.dart';
 import 'login.dart';
-import 'profile.dart';
-import 'reviews.dart';
-import 'theme_provider.dart';
-import 'notifications.dart';
+import 'models/profile.dart';
+import 'models/reviews.dart';
+import 'services/QRCode.dart';
+import 'services/theme_provider.dart';
+import 'models/notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:qr_flutter/qr_flutter.dart'; //fetch qr code api
-import 'location.dart';
-import 'splash.dart';
-import 'hive.dart';
+//import 'package:qr_flutter/qr_flutter.dart'; //fetch qr code api
+import 'services/location.dart';
+import 'services/splash.dart';
+import 'services/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'chatbot.dart';
+import 'services/chatbot.dart';
 
 Future<void> main() async {
   // Ensure that Flutter bindings are initialized before using Hive
@@ -27,7 +30,8 @@ Future<void> main() async {
 
   // Initialize Hive and HiveStorage before running the app
   await Hive.initFlutter();
-  await HiveStorage.initHive(); // Make sure the HiveStorage class initializes the box
+  await HiveStorage
+      .initHive(); // Make sure the HiveStorage class initializes the box
 
   // Now run the app
   runApp(
@@ -41,11 +45,6 @@ Future<void> main() async {
   );
 }
 
-
-
-
-
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -54,117 +53,56 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isDarkMode = false;
+  //bool _isDarkMode = false;
 
-  void _toggleTheme() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
-  }
-
-  ThemeData _lightTheme() {
-    return ThemeData(
-      brightness: Brightness.light,
-      primaryColor: const Color.fromARGB(255, 255, 255, 255),
-      scaffoldBackgroundColor: Colors.white,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.blue,
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      bottomAppBarTheme: const BottomAppBarTheme(
-        color: Colors.white,
-        //iconTheme: IconThemeData(color: Colors.white),
-      ),
-      textTheme: const TextTheme(
-        bodyMedium: TextStyle(color: Colors.black),
-        //bodyMedium: TextStyle(color: Colors.black54),
-        bodyLarge:
-            TextStyle(color: Colors.black), // Ensure bodyLarge color is set
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          theme: themeProvider.currentTheme,
+          initialRoute: '/splash', // Start at login page
+          routes: {
+            '/splash': (context) => const SplashScreen(),
+            '/login': (context) => LoginPage(
+                  themeProvider: ThemeProvider(),
+                ),
+            '/main': (context) => HomePage(
+                  toggleTheme: themeProvider.toggleTheme,
+                  isDarkMode: themeProvider.isDarkMode,
+                ),
+            '/review': (context) => const ReviewsPage(),
+            '/notifications': (context) => const NotificationsPage(),
+            '/profile': (context) => ProfilePage(
+                  toggleTheme: themeProvider.toggleTheme,
+                  isDarkMode: themeProvider.isDarkMode,
+                ),
+          },
+          debugShowCheckedModeBanner: false,
+          // Set the home as Scaffold to include floating action button
+          home: Scaffold(
+            appBar: AppBar(title: const Text('Home Page')),
+            body: HomePage(
+              toggleTheme: themeProvider.toggleTheme,
+              isDarkMode: themeProvider.isDarkMode,
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                // Trigger chatbot popup
+                showDialog(
+                  context: context,
+                  builder: (context) => ChatbotPopup(),
+                );
+              },
+              backgroundColor: Colors.blue,
+              child: const Icon(Icons.chat),
+            ),
+          ),
+        );
+      },
     );
   }
-
-  ThemeData _darkTheme() {
-    return ThemeData.dark().copyWith(
-      colorScheme: ThemeData.dark().colorScheme.copyWith(
-            secondary: Colors.black,
-            surface: Colors.black,
-          ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.black,
-      ),
-    );
-  }
-
-@override
-Widget build(BuildContext context) {
-  return Consumer<ThemeProvider>(
-    builder: (context, themeProvider, child) {
-      return MaterialApp(
-        theme: themeProvider.currentTheme,
-        initialRoute: '/splash', // Start at login page
-        routes: {
-          '/splash': (context) => const SplashScreen(),
-          '/login': (context) => LoginPage(
-            themeProvider: ThemeProvider(),
-          ),
-          '/main': (context) => HomePage(
-            toggleTheme: themeProvider.toggleTheme,
-            isDarkMode: themeProvider.isDarkMode,
-          ),
-          '/review': (context) => const ReviewsPage(),
-          '/notifications': (context) => const NotificationsPage(),
-          '/profile': (context) => ProfilePage(
-            toggleTheme: themeProvider.toggleTheme,
-            isDarkMode: themeProvider.isDarkMode,
-          ),
-        },
-        debugShowCheckedModeBanner: false,
-        // Set the home as Scaffold to include floating action button
-        home: Scaffold(
-          appBar: AppBar(title: const Text('Home Page')),
-          body: HomePage(
-            toggleTheme: themeProvider.toggleTheme,
-            isDarkMode: themeProvider.isDarkMode,
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              // Trigger chatbot popup
-              showDialog(
-                context: context,
-                builder: (context) => ChatbotPopup(),
-              );
-            },
-            child: const Icon(Icons.chat),
-            backgroundColor: Colors.blue,
-          ),
-        ),
-      );
-    },
-  );
 }
-
-
-}
-
-
-    // return Scaffold(
-    //   body: Center(
-    //     child: Text("This is another page."),
-    //   ),
-    //   floatingActionButton: FloatingActionButton(
-    //     onPressed: () {
-    //       // Trigger chatbot popup
-    //       showDialog(
-    //         context: context,
-    //         builder: (context) => ChatbotPopup(),
-    //       );
-    //     },
-    //     child: const Icon(Icons.chat),
-    //     backgroundColor: Colors.blue,
-    //   ),
-    // );
- 
 
 class BobaStores {
   late String name;
@@ -231,122 +169,20 @@ Widget _buildBottomNavItem(
   );
 }
 
-void _showQRCodeModal(
-  BuildContext context,
-) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Scan Here"),
-        content: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Stack(
-            children: [
-              // White container with colored border
-              SizedBox(
-                height: 200,
-                width: 150,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    height: 160,
-                    width: 160,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: QrImageView(
-                        data: 'This is a simple QR code',
-                        version: QrVersions.auto,
-                        size: 120,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Close"),
-          ),
-        ],
-      );
-    },
+//CALL QRCODE HERE
+void _goToQRCodePage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) => QRCodePage()), // Navigate to QRCodePage
   );
 }
 
-void _showSettingsMenu(BuildContext context) {
-  showMenu(
-    context: context,
-    position: const RelativeRect.fromLTRB(0, 100, 0, 0),
-    items: <PopupMenuEntry<String>>[
-      const PopupMenuItem<String>(
-        value: 'Help',
-        child: Text('Help', style: TextStyle(color: Colors.white)),
-      ),
-      const PopupMenuItem<String>(
-        value: 'Change Username',
-        child: Text('Change Username', style: TextStyle(color: Colors.white)),
-      ),
-      const PopupMenuItem<String>(
-        value: 'Instagram Handle',
-        child: Text('Instagram Handle', style: TextStyle(color: Colors.white)),
-      ),
-      const PopupMenuItem<String>(
-        value: 'Rate Us on App Store',
-        child:
-            Text('Rate Us on App Store', style: TextStyle(color: Colors.white)),
-      ),
-      const PopupMenuItem<String>(
-        value: 'Logout',
-        child: Text('Logout', style: TextStyle(color: Colors.white)),
-      ),
-    ],
-    // Set the background color for the entire menu
-    color: Colors.blueGrey[800], // Change this to your desired color
-    elevation: 8,
-  ).then((value) {
-    if (value != null) {
-      switch (value) {
-        case 'Help':
-          // Handle help button pressed
-          break;
-        case 'Change Username':
-          // Handle change username pressed
-          break;
-        case 'Logout':
-          break;
-        case 'Rate Us on App Store':
-          break;
-        case 'Instagram Handle':
-          break;
-      }
-    }
-  });
-}
-
-String getGreeting() {
-  var now = DateTime.now()
-      .toUtc()
-      .subtract(const Duration(hours: 8)); // Adjust for PST
-  var hour = now.hour;
-
-  if (hour >= 6 && hour < 12) {
-    return 'Good Morning';
-  } else if (hour >= 12 && hour < 18) {
-    return 'Good Afternoon';
-  } else {
-    return 'Good Evening';
-  }
-}
+//call show settings!
+_showSettingsMenu(context) {
+  // TODO: implement _showSettingsMenu
+  throw UnimplementedError();
+} 
 
 List<String> selectedItems = [];
 
@@ -426,11 +262,8 @@ void _viewOrder(BuildContext context) {
   //print('View Order clicked!');
 }
 
-String getCurrentDate() {
-  var now = DateTime.now();
-  var formatter = DateFormat('MMM dd, yyyy');
-  return formatter.format(now);
-}
+String greeting = getGreeting(); //call greeting func
+String currentDate = getCurrentDate(); //call date func
 
 class AppBarContent extends StatelessWidget {
   final VoidCallback toggleTheme;
@@ -445,24 +278,7 @@ class AppBarContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final locationProvider = Provider.of<LocationProvider>(context);
-
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Home'),
-      //   actions: [
-      //     IconButton(
-      //       icon: Icon(
-      //         Icons.settings_accessibility_outlined,
-      //         color: Theme.of(context).appBarTheme.iconTheme?.color,
-      //       ),
-      //       onPressed: () {
-      //         final themeProvider =
-      //             Provider.of<ThemeProvider>(context, listen: false);
-      //         themeProvider.toggleTheme();
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -509,38 +325,6 @@ class AppBarContent extends StatelessWidget {
                 ],
               ),
             ),
-            // const SizedBox(height: 4.0),
-            // TextField(
-            //   decoration: const InputDecoration(
-            //     labelText: 'Enter city or zipcode',
-            //     border: OutlineInputBorder(),
-            //   ),
-            //   onChanged: (value) {
-            //     locationProvider.setLocation(value);
-            //   },
-            // ),
-            // const SizedBox(height: 16.0),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     locationProvider.fetchLocation();
-            //   },
-            //   child: const Text('Show Map'),
-            // ),
-            // const SizedBox(height: 16.0),
-            // Expanded(
-            //   child: locationProvider.hasMapController
-            //       ? const Center(child: Text('Enter a location to see the map'))
-            //       : GoogleMap(
-            //           initialCameraPosition: CameraPosition(
-            //             target: locationProvider.initialPosition,
-            //             zoom: 14.0,
-            //           ),
-            //           onMapCreated: (controller) {
-            //             locationProvider.hasMapController;
-            //           },
-            //           markers: locationProvider.markers,
-            //         ),
-            // ),
           ],
         ),
       ),
@@ -625,25 +409,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void searchBobaStores(String query) {
-    if (query.isEmpty) {
-      filteredBobaStores = List.from(bobaSearch);
-      hideOverlay(); // Hide the overlay when the search text is empty
-    } else {
-      filteredBobaStores = bobaSearch
-          .where(
-              (store) => store.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-      showOverlay(context); // Show the overlay when there is a search text
-    }
-
-    setState(() {
-      isOverlayVisible = true;
-    });
-  }
-
   get backgroundColor => null;
-
+//Password: Carrots1234
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -806,59 +573,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                              height:
-                                  10), // Space between scroll view and 3D object
-                          // 3D object
-                          // const SizedBox(
-                          //   height: 400, // Specify height
-                          //   width: 400, // Specify width
-                          //   child: SimpleCube(),
-                          // ),
                         ],
                       ),
-
-                      Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Stack(
-                            children: [
-                              // White container with colored border
-                              Container(
-                                height: 150,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 206, 189, 152),
-                                      width: 2),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Container(
-                                    height: 160,
-                                    width: 160,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Center(
-                                      child: QrImageView(
-                                        data: 'This is a simple QR code',
-                                        version: QrVersions.auto,
-                                        size: 120,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
                       Container(
                         height: 20, // Adjust height as needed
                         color: Colors.white,
@@ -867,7 +583,6 @@ class _HomePageState extends State<HomePage> {
                               EdgeInsets.all(8.0), // Adjust padding as needed
                         ),
                       ),
-
                       Container(
                         height: 330,
                         color: const Color.fromARGB(255, 206, 189, 152),
@@ -1006,9 +721,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-
-                      //end of main container
-
                       Container(
                         height: 5,
                         color: const Color.fromARGB(255, 255, 255, 255),
@@ -1020,7 +732,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-
                       Container(
                         height: 10,
                         color: const Color.fromARGB(255, 255, 255, 255),
@@ -1039,65 +750,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-
-        bottomNavigationBar: BottomAppBar(
-          color: Theme.of(context).bottomAppBarTheme.color,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              // Home Button
-              _buildBottomNavItem(
-                context,
-                Icons.star_half_sharp,
-                'Reviews',
-                () {
-                  Navigator.pushNamed(context, '/review');
-                },
-                iconSize: 21.0,
-              ),
-              // Search Button
-              _buildBottomNavItem(
-                context,
-                Icons.home,
-                'Home',
-                () {
-                  // Handle search button tap
-                },
-                iconSize: 21.0,
-              ),
-              // QR Code Button
-              _buildBottomNavItem(
-                context,
-                Icons.qr_code,
-                'QR Code',
-                () {
-                  _showQRCodeModal(context);
-                },
-                iconSize: 21.0,
-              ),
-              // Notifications Button
-              _buildBottomNavItem(
-                context,
-                Icons.notifications,
-                'Notifications',
-                () {
-                  Navigator.pushNamed(context, '/notifications');
-                },
-                iconSize: 21.0,
-              ),
-              // Profile Button
-              _buildBottomNavItem(
-                context,
-                Icons.person,
-                'Profile',
-                () {
-                  Navigator.pushNamed(context, '/profile');
-                },
-                iconSize: 21.0,
-              ),
-            ],
-          ),
-        ),
+         bottomNavigationBar: buildBottomNavBar(context), // Call bottombar func
       ),
     );
   }

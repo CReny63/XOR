@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart'; // Assuming HomePage is defined here
-import 'theme_provider.dart'; // Assuming ThemeProvider is defined here
+import 'services/theme_provider.dart'; // Assuming ThemeProvider is defined here
 
 class LoginPage extends StatefulWidget {
   final ThemeProvider themeProvider;

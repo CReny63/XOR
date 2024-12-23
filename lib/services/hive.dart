@@ -3,7 +3,7 @@
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'user.dart'; // Import your user class (if using custom objects)
+import '../user.dart'; // Import your user class (if using custom objects)
 
 class HiveStorage {
   static late Box userBox;

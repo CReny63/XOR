@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta_verse/main.dart';
-import 'package:meta_verse/theme_provider.dart';
+import 'package:meta_verse/services/theme_provider.dart';
 import 'package:provider/provider.dart';
 //import 'theme_provider.dart';
 

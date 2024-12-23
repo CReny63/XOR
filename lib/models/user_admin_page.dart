@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'admin.dart';
-import 'chatbot.dart'; // Import the Chatbot file
-import 'package:meta_verse/theme_provider.dart';
-import 'login.dart'; // Import the Login Page
+import '../admin.dart';
+import '../services/chatbot.dart'; // Import the Chatbot file
+import 'package:meta_verse/services/theme_provider.dart';
+import '../login.dart'; // Import the Login Page
 
 class UserAdminPage extends StatelessWidget {
   const UserAdminPage({Key? key}) : super(key: key);
