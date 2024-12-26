@@ -1,26 +1,60 @@
 import 'package:flutter/material.dart';
 import '../models/user_admin_page.dart'; // Import the User/Admin Selection Page
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // Delay for 3 seconds and navigate to the next screen
-    Future.delayed(const Duration(seconds: 5), () {
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _fadeController;
+  late final Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize the fade animation
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+
+    // Trigger fade animation once
+    _fadeController.forward();
+
+    // Navigate to the next screen after 5 seconds
+    Future.delayed(const Duration(seconds: 6), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const UserAdminPage()),
       );
     });
+  }
 
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 249, 249, 249), // Saddle Brown
-              Color(0xFFD2B48C), // Tan
+              Color.fromARGB(255, 249, 249, 249), // Light Beige
+              Color.fromARGB(255, 254, 254, 254), // Tan
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -30,19 +64,22 @@ class SplashScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "metaV",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
+              FadeTransition(
+                opacity: _fadeAnimation,
+                child: const Text(
+                  "metaV",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                width: 100,
-                height: 200,
-                child: _BobaCupLoadingAnimation(),
+              const SizedBox(
+                width: 50,
+                height: 50,
+                child: _BobaBallLoadingAnimation(),
               ),
             ],
           ),
@@ -52,13 +89,15 @@ class SplashScreen extends StatelessWidget {
   }
 }
 
-class _BobaCupLoadingAnimation extends StatefulWidget {
+class _BobaBallLoadingAnimation extends StatefulWidget {
+  const _BobaBallLoadingAnimation();
+
   @override
-  State<_BobaCupLoadingAnimation> createState() =>
-      _BobaCupLoadingAnimationState();
+  State<_BobaBallLoadingAnimation> createState() =>
+      _BobaBallLoadingAnimationState();
 }
 
-class _BobaCupLoadingAnimationState extends State<_BobaCupLoadingAnimation>
+class _BobaBallLoadingAnimationState extends State<_BobaBallLoadingAnimation>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
@@ -78,77 +117,41 @@ class _BobaCupLoadingAnimationState extends State<_BobaCupLoadingAnimation>
       builder: (context, child) {
         return Transform.rotate(
           angle: _controller.value * 2 * 3.141592653589793, // Full rotation
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Cup
-              Container(
-                width: 50,
-                height: 100,
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(
+                  0xFF4E342E), // Dark brown base color for the boba ball
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.6),
+                  offset: const Offset(0.5, 0.5),
+                  // spreadRadius: 0.5,
+                  // blurRadius: 0.5,
+                ),
+              ],
+              gradient: const RadialGradient(
+                colors: [
+                  Color(0xFF6D4C41), // Lighter brown highlight
+                  Color.fromARGB(255, 30, 27, 26), // Base color
+                ],
+                center: Alignment(-0.4, -0.4),
+                radius: 0.8,
+              ),
+            ),
+            child: Align(
+              alignment: const Alignment(-0.4, -0.4),
+              child: Container(
+                width: 5,
+                height: 5,
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
-                  border: Border.all(color: Colors.brown, width: 2),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // White top half
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 250, 250, 250),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            topRight: Radius.circular(25),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Dark orange bottom half with boba balls
-                    Expanded(
-                      flex: 2,
-                      child: Stack(
-                        children: [
-                          Container(
-                            color: const Color.fromARGB(255, 82, 193, 117), // Dark orange
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: List.generate(5, (index) {
-                                return Container(
-                                  margin: const EdgeInsets.only(top: 5),
-                                  width: 8,
-                                  height: 6,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    shape: BoxShape.circle,
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.9),
                 ),
               ),
-              // Straw
-              Positioned(
-                top: 20,
-                child: Container(
-                  width: 5,
-                  height: 40,
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },
