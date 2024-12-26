@@ -168,57 +168,58 @@ class _ReviewsPageState extends State<ReviewsPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: const Color.fromARGB(255, 255, 255, 255), // Coffee brown color
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _buildBottomNavItem(
-              context,
-              Icons.star_half_outlined,
-              'Reviews',
-              () {},
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.home,
-              'Home',
-              () {
-                Navigator.pushNamed(context, '/');
-              },
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.qr_code,
-              'QR Code',
-              () {
-                _showQRCodeModal(context);
-              },
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.notifications,
-              'Notifications',
-              () {
-                Navigator.pushNamed(context, '/notifications');
-              },
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.person,
-              'Profile',
-              () {
-                Navigator.pushNamed(context, '/profile');
-              },
-              iconSize: 21.0,
-            ),
-          ],
-        ),
+  bottomNavigationBar: BottomAppBar(
+  color: const Color.fromARGB(255, 255, 255, 255), // White color
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: <Widget>[
+      _buildBottomNavItem(
+        context,
+        Icons.star_half_outlined,
+        'Reviews', // Tooltip text
+        () {},
+        iconSize: 21.0,
       ),
+      _buildBottomNavItem(
+        context,
+        Icons.home,
+        'Home', // Tooltip text
+        () {
+          Navigator.pushNamed(context, '/');
+        },
+        iconSize: 21.0,
+      ),
+      _buildBottomNavItem(
+        context,
+        Icons.qr_code,
+        'QR Code', // Tooltip text
+        () {
+          _showQRCodeModal(context);
+        },
+        iconSize: 21.0,
+      ),
+      _buildBottomNavItem(
+        context,
+        Icons.notifications,
+        'Notifications', // Tooltip text
+        () {
+          Navigator.pushNamed(context, '/notifications');
+        },
+        iconSize: 21.0,
+      ),
+      _buildBottomNavItem(
+        context,
+        Icons.person,
+        'Profile', // Tooltip text
+        () {
+          Navigator.pushNamed(context, '/profile');
+        },
+        iconSize: 21.0,
+      ),
+    ],
+  ),
+),
+
     );
   }
 

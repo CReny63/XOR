@@ -38,7 +38,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => LocationProvider()),
+        //ChangeNotifierProvider(create: (_) => LocationPage()),
       ],
       child: const MyApp(),
     ),
@@ -57,9 +57,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    
+   
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         return MaterialApp(
+        
           theme: themeProvider.currentTheme,
           initialRoute: '/splash', // Start at login page
           routes: {
@@ -81,6 +84,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           // Set the home as Scaffold to include floating action button
           home: Scaffold(
+            
             appBar: AppBar(title: const Text('Home Page')),
             body: HomePage(
               toggleTheme: themeProvider.toggleTheme,
@@ -182,7 +186,7 @@ void _goToQRCodePage(BuildContext context) {
 _showSettingsMenu(context) {
   // TODO: implement _showSettingsMenu
   throw UnimplementedError();
-} 
+}
 
 List<String> selectedItems = [];
 
@@ -337,9 +341,22 @@ class _HomePageState extends State<HomePage> {
   List<BobaStores> filteredBobaStores = [];
   OverlayEntry? overlayEntry;
 
+  void _showLocationPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationPage(),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+  //  WidgetsBinding.instance.addPostFrameCallback((_) { //make sure it pops up with home page
+     // _showLocationPage();//call location.dart funcs
+   // });
     filteredBobaStores.addAll(bobaSearch);
   }
 
@@ -750,7 +767,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-         bottomNavigationBar: buildBottomNavBar(context), // Call bottombar func
+        bottomNavigationBar: buildBottomNavBar(context), // Call bottombar func
       ),
     );
   }
