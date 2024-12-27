@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meta_verse/home_page.dart';
+//import 'package:meta_verse/home_page.dart';
 
 class Splash2 extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _Splash2State extends State<Splash2> with SingleTickerProviderStateMixin {
     // Initialize the fade animation
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 5),
     );
 
     _fadeAnimation = CurvedAnimation(

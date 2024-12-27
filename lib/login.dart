@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta_verse/services/splash2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'main.dart'; // Assuming HomePage is defined here
+//import 'main.dart'; // Assuming HomePage is defined here
 //import 'services/splash.dart';
 import 'services/theme_provider.dart'; // Assuming ThemeProvider is defined here
 
@@ -37,7 +37,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // Save credentials to SharedPreferences
-  Future<void> _saveCredentials(String username, String password, String email) async {
+  Future<void> _saveCredentials(
+      String username, String password, String email) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('username', username);
     await prefs.setString('password', password);
@@ -52,27 +53,26 @@ class _LoginPageState extends State<LoginPage> {
 
     if (savedUsername == null || savedPassword == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No saved credentials. Please sign up first.')),
+        const SnackBar(
+            content: Text('No saved credentials. Please sign up first.')),
       );
       return;
     }
 
-  if (usernameController.text == savedUsername &&
-    passwordController.text == savedPassword) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Sign In Successful!')),
-  );
+    if (usernameController.text == savedUsername &&
+        passwordController.text == savedPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sign In Successful!')),
+      );
 
-  // Navigate to SplashScreen (no need for nextPage)
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) =>  Splash2(),
-    ),
-  );
-}
-
-else {
+      // Navigate to SplashScreen (no need for nextPage)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Splash2(),
+        ),
+      );
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid username or password.')),
       );
@@ -81,15 +81,19 @@ else {
 
   // Validate password
   bool _validatePassword(String password) {
-    final passwordRegex = RegExp(r'^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d).{7,}$');
+    final passwordRegex =
+        RegExp(r'^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d).{7,}$');
     return passwordRegex.hasMatch(password);
   }
 
   // Show Sign-Up dialog
   void _showSignUpDialog() {
-    final TextEditingController signUpUsernameController = TextEditingController();
-    final TextEditingController signUpPasswordController = TextEditingController();
-    final TextEditingController confirmPasswordController = TextEditingController();
+    final TextEditingController signUpUsernameController =
+        TextEditingController();
+    final TextEditingController signUpPasswordController =
+        TextEditingController();
+    final TextEditingController confirmPasswordController =
+        TextEditingController();
     final TextEditingController emailController = TextEditingController();
 
     showDialog(
@@ -104,8 +108,8 @@ else {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        final XFile? pickedFile =
-                            await _picker.pickImage(source: ImageSource.gallery);
+                        final XFile? pickedFile = await _picker.pickImage(
+                            source: ImageSource.gallery);
                         if (pickedFile != null) {
                           setState(() {
                             _image = File(pickedFile.path);
@@ -176,7 +180,8 @@ else {
                         signUpPasswordController.text.isEmpty ||
                         confirmPasswordController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('All fields are required.')),
+                        const SnackBar(
+                            content: Text('All fields are required.')),
                       );
                       return;
                     }
@@ -190,15 +195,18 @@ else {
                       );
                       return;
                     }
-                    if (signUpPasswordController.text != confirmPasswordController.text) {
+                    if (signUpPasswordController.text !=
+                        confirmPasswordController.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Passwords do not match.')),
+                        const SnackBar(
+                            content: Text('Passwords do not match.')),
                       );
                       return;
                     }
                     if (_image == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select a profile picture.')),
+                        const SnackBar(
+                            content: Text('Please select a profile picture.')),
                       );
                       return;
                     }
@@ -212,6 +220,10 @@ else {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Sign Up Successful!')),
+                    );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Splash2()),
                     );
                   },
                   child: const Text('Sign Up'),
@@ -288,7 +300,8 @@ else {
                     },
                     child: const Text(
                       'Forgot Password?',
-                      style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                   ),
                 ),

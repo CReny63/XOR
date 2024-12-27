@@ -68,8 +68,8 @@ class _MyAppState extends State<MyApp> {
           theme: themeProvider.currentTheme,
   initialRoute: '/splash', // Start at splash screen
   routes: {
-    '/splash': (context) =>  SplashScreen(),
-    '/splash2': (context) =>  Splash2(),
+    '/splash': (context) =>  SplashScreen(),//splash1 to user_admin
+    '/splash2': (context) =>  Splash2(),//successful sign in -> splash2 -> home
     '/user_admin':(context) => const UserAdminPage(),
     '/login': (context) => LoginPage(
       themeProvider: ThemeProvider(),
