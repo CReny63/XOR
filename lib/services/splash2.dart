@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:meta_verse/home_page.dart';
 
-class SplashScreen extends StatefulWidget {
+class Splash2 extends StatefulWidget {
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  _Splash2State createState() => _Splash2State();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _Splash2State extends State<Splash2> with SingleTickerProviderStateMixin {
   late final AnimationController _fadeController;
   late final Animation<double> _fadeAnimation;
 
@@ -28,14 +28,11 @@ class _SplashScreenState extends State<SplashScreen>
     // Trigger fade animation once
     _fadeController.forward();
 
-    // Navigate to the user_admin page after 6 seconds
-    Future.delayed(const Duration(seconds: 6), () {
-      _navigateToUserAdmin();
-    });
-  }
+    // Navigate to the home page after 4 seconds
+    Future.delayed(const Duration(seconds: 5), () {
+  Navigator.pushReplacementNamed(context, '/main');
+});
 
-  void _navigateToUserAdmin() {
-    Navigator.pushReplacementNamed(context, '/user_admin');
   }
 
   @override
@@ -65,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen>
               FadeTransition(
                 opacity: _fadeAnimation,
                 child: const Text(
-                  "metaV",
+                  "Logging in...",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,

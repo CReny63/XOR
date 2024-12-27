@@ -6,6 +6,8 @@ import 'package:hive_flutter/adapters.dart';
 //import 'package:intl/intl.dart'; //to fetch real world time
 import 'package:flutter/material.dart';
 import 'package:meta_verse/models/bottom_bar.dart';
+import 'package:meta_verse/models/user_admin_page.dart';
+import 'package:meta_verse/services/splash2.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 //import '3d_object.dart';
@@ -64,23 +66,25 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
         
           theme: themeProvider.currentTheme,
-          initialRoute: '/splash', // Start at login page
-          routes: {
-            '/splash': (context) => const SplashScreen(),
-            '/login': (context) => LoginPage(
-                  themeProvider: ThemeProvider(),
-                ),
-            '/main': (context) => HomePage(
-                  toggleTheme: themeProvider.toggleTheme,
-                  isDarkMode: themeProvider.isDarkMode,
-                ),
-            '/review': (context) => const ReviewsPage(),
-            '/notifications': (context) => const NotificationsPage(),
-            '/profile': (context) => ProfilePage(
-                  toggleTheme: themeProvider.toggleTheme,
-                  isDarkMode: themeProvider.isDarkMode,
-                ),
-          },
+  initialRoute: '/splash', // Start at splash screen
+  routes: {
+    '/splash': (context) =>  SplashScreen(),
+    '/splash2': (context) =>  Splash2(),
+    '/user_admin':(context) => const UserAdminPage(),
+    '/login': (context) => LoginPage(
+      themeProvider: ThemeProvider(),
+    ),
+    '/main': (context) => HomePage(
+      toggleTheme: themeProvider.toggleTheme,
+      isDarkMode: themeProvider.isDarkMode,
+    ),
+    '/review': (context) => const ReviewsPage(),
+    '/notifications': (context) => const NotificationsPage(),
+    '/profile': (context) => ProfilePage(
+      toggleTheme: themeProvider.toggleTheme,
+      isDarkMode: themeProvider.isDarkMode,
+    ),
+  },
           debugShowCheckedModeBanner: false,
           // Set the home as Scaffold to include floating action button
           home: Scaffold(

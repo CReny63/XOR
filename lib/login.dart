@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meta_verse/services/splash2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart'; // Assuming HomePage is defined here
+//import 'services/splash.dart';
 import 'services/theme_provider.dart'; // Assuming ThemeProvider is defined here
 
 class LoginPage extends StatefulWidget {
@@ -55,21 +57,22 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    if (usernameController.text == savedUsername &&
-        passwordController.text == savedPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign In Successful!')),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(
-            toggleTheme: widget.themeProvider.toggleTheme,
-            isDarkMode: widget.themeProvider.isDarkMode,
-          ),
-        ),
-      );
-    } else {
+  if (usernameController.text == savedUsername &&
+    passwordController.text == savedPassword) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Sign In Successful!')),
+  );
+
+  // Navigate to SplashScreen (no need for nextPage)
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (context) =>  Splash2(),
+    ),
+  );
+}
+
+else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid username or password.')),
       );
