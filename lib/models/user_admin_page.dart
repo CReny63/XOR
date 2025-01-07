@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../admin.dart';
-import '../services/chatbot.dart'; // Import the Chatbot file
+import '../widgets/chatbot_popup.dart'; // Import the Chatbot file
 import 'package:meta_verse/services/theme_provider.dart';
 import '../login.dart'; // Import the Login Page
 

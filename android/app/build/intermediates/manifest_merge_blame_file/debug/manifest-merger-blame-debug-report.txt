@@ -1,0 +1,71 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.meta_verse"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="34" />
+10    <!-- Location Permissions -->
+11    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+11-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:6:5-79
+11-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:6:22-76
+12    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+12-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:7:5-81
+12-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:7:22-78
+13    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+13-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:8:5-85
+13-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:8:22-82
+14
+15    <application
+15-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:10:5-34:19
+16        android:debuggable="true"
+17        android:icon="@mipmap/ic_launcher"
+17-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:12:9-43
+18        android:label="meta_verse" >
+18-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:11:9-35
+19        <activity
+19-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:15:9-29:20
+20            android:name="com.example.meta_verse.MainActivity"
+20-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:16:13-41
+21            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+21-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:20:13-163
+22            android:exported="true"
+22-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:17:13-36
+23            android:hardwareAccelerated="true"
+23-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:21:13-47
+24            android:launchMode="singleTop"
+24-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:18:13-43
+25            android:theme="@style/LaunchTheme"
+25-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:19:13-47
+26            android:windowSoftInputMode="adjustResize" >
+26-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:22:13-55
+27            <meta-data
+27-->C:\flutterapps\meta_verse\android\app\src\debug\AndroidManifest.xml:19:13-22:19
+28                android:name="io.flutter.embedding.android.NormalTheme"
+28-->C:\flutterapps\meta_verse\android\app\src\debug\AndroidManifest.xml:20:17-72
+29                android:resource="@style/NormalTheme" />
+29-->C:\flutterapps\meta_verse\android\app\src\debug\AndroidManifest.xml:21:17-54
+30
+31            <intent-filter>
+31-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:25:13-28:29
+32                <action android:name="android.intent.action.MAIN" />
+32-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:26:17-69
+32-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:26:25-66
+33
+34                <category android:name="android.intent.category.LAUNCHER" />
+34-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:27:17-77
+34-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:27:27-74
+35            </intent-filter>
+36        </activity>
+37
+38        <meta-data
+38-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:31:9-33:33
+39            android:name="flutterEmbedding"
+39-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:32:13-44
+40            android:value="2" />
+40-->C:\flutterapps\meta_verse\android\app\src\main\AndroidManifest.xml:33:13-30
+41    </application>
+42
+43</manifest>

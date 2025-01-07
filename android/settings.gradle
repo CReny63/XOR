@@ -2,9 +2,9 @@ pluginManagement {
     def flutterSdkPath = {
         def properties = new Properties()
         file("local.properties").withInputStream { properties.load(it) }
-        def flutterSdkPath = properties.getProperty("flutter.sdk")
-        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
-        return flutterSdkPath
+        def sdkPath = properties.getProperty("flutter.sdk")
+        assert sdkPath != null, "flutter.sdk not set in local.properties"
+        return sdkPath
     }()
 
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
@@ -14,12 +14,17 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+
+    // You can leave it blank or only declare other non-AGP plugins here if needed:
+    // plugins {
+    //     // No com.android.application or org.jetbrains.kotlin.android here.
+    // }
 }
 
+// This plugin is auto-added by Flutter to load the module/app
 plugins {
-    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    id "com.android.application" version "7.3.0" apply false
-    id "org.jetbrains.kotlin.android" version "1.7.10" apply false
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
 }
 
-include ":app"
+// Include your app module
+include(":app")

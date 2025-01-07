@@ -1,10 +1,10 @@
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
-}
+// Old/traditional plugin application
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+// Uncomment if you need Flutter’s Gradle plugin explicitly:
+// apply plugin: 'dev.flutter.flutter-gradle-plugin'
 
+// Load local.properties for flutterVersionCode/flutterVersionName
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -13,46 +13,66 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
-if (flutterVersionCode == null) {
-    flutterVersionCode = "1"
-}
-
-def flutterVersionName = localProperties.getProperty("flutter.versionName")
-if (flutterVersionName == null) {
-    flutterVersionName = "1.0"
-}
+// If these aren't set, default to '1' and '1.0'
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode") ?: "1"
+def flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "1.0"
 
 android {
     namespace = "com.example.meta_verse"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 34
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.meta_verse"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        minSdk = 21
+        targetSdk = 34
+
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        
+    }
+
+    signingConfigs {
+        release {
+            // If your keystore is in the project root (two levels up from android/app):
+            storeFile file("../../my-release-key.jks")
+
+            // Update these with your actual credentials
+            storePassword "Champreny31013"
+            keyAlias "myKeyAlias"
+            keyPassword "Champreny31013"
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig signingConfigs.release
+
+            shrinkResources true
+            minifyEnabled true
+
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                          'proguard-rules.pro'
         }
     }
 }
 
-flutter {
-    source = "../.."
+dependencies {
+    // Add any dependencies your Android module needs
 }
+
+// If you want to ensure Kotlin 1.8 compilation:
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+// (Optional) If you need the Flutter Gradle plugin to know where your Flutter code is:
+// flutter {
+//     source = "../.."
+// }

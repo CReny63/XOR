@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.meta_verse-mergeReleaseResources-9:/values/values.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\crren\\.gradle\\caches\\transforms-3\\d14cd45e08f3e122ea8cbe765e19932e\\transformed\\lifecycle-viewmodel-2.6.1\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "49",
+                        "endOffsets": "100"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.meta_verse.app-mergeDebugResources-3:/values/values.xml",
+            "map": [
+                {
+                    "source": "C:\\flutterapps\\meta_verse\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "3,14",
+                        "startColumns": "4,4",
+                        "startOffsets": "176,832",
+                        "endLines": "7,16",
+                        "endColumns": "12,12",
+                        "endOffsets": "483,998"
+                    },
+                    "to": {
+                        "startLines": "2,6",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,236",
+                        "endLines": "5,8",
+                        "endColumns": "12,12",
+                        "endOffsets": "231,400"
+                    }
+                }
+            ]
+        }
+    ]
+}

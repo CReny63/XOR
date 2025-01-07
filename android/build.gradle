@@ -1,18 +1,21 @@
+buildscript {
+    ext.kotlin_version = '1.7.10'  // Updated Kotlin version
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.4.2"  // Updated AGP version
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // Kotlin plugin
+        //classpath "dev.flutter:flutter-gradle-plugin:1.0.0" // Flutter plugin (keep commented out)
+    }
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
+        jcenter()  // Optional, if using libraries that still reference jcenter
     }
-}
-
-rootProject.buildDir = "../build"
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(":app")
-}
-
-tasks.register("clean", Delete) {
-    delete rootProject.buildDir
 }

@@ -1,18 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.meta_verse">
+
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="meta_verse"
-        android:icon="@mipmap/ic_launcher">
-        
+        android:icon="@mipmap/ic_launcher"
+        tools:replace="android:label">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-            <!-- Specifies an Android theme to apply to this Activity as soon as the Android process has started. This theme is visible to the user while the Flutter UI initializes. -->
+            android:windowSoftInputMode="adjustResize"
+            tools:replace="android:configChanges">
+
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme"
@@ -23,7 +26,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Don't delete the meta-data below. This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

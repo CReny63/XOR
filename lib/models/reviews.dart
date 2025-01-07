@@ -18,7 +18,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(75),
+        preferredSize: Size.fromHeight(65),
         child: AppBarContent(),
       ),
       backgroundColor: const Color.fromARGB(255, 206, 189, 152), // Coffee brown background
@@ -185,7 +185,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
         Icons.home,
         'Home', // Tooltip text
         () {
-          Navigator.pushNamed(context, '/');
+          Navigator.pushNamed(context, '/main');
         },
         iconSize: 21.0,
       ),

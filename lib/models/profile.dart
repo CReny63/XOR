@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
+// If you no longer need direct access to Provider, you can remove this import.
+// import 'package:provider/provider.dart';
+// import 'package:meta_verse/services/theme_provider.dart'; // Not needed if we don't call Provider.of<ThemeProvider>
+
+import 'package:meta_verse/widgets/app_bar_content.dart'; // If you have a separate custom AppBarContent
+// or define your own TopAppBarContent or something similar.
 
 class ProfilePage extends StatelessWidget {
   final VoidCallback toggleTheme;
   final bool isDarkMode;
 
-  const ProfilePage(
-      {super.key, required this.toggleTheme, required this.isDarkMode});
+  const ProfilePage({
+    super.key,
+    required this.toggleTheme,
+    required this.isDarkMode,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(75),
-        child: AppBarContent(),
+      // Here we call our custom app bar, but rely on the values from constructor:
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(75),
+        child: AppBarContent(
+          toggleTheme: toggleTheme,       // use the callback we got from constructor
+          isDarkMode: isDarkMode,         // use the boolean from constructor
+        ),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -22,6 +35,7 @@ class ProfilePage extends StatelessWidget {
               length: 2,
               child: Column(
                 children: <Widget>[
+                  // Tab bar
                   Container(
                     color: Theme.of(context).cardColor,
                     child: const TabBar(
@@ -32,6 +46,7 @@ class ProfilePage extends StatelessWidget {
                       ],
                     ),
                   ),
+                  // Tab bar views
                   Expanded(
                     child: TabBarView(
                       children: [
@@ -55,36 +70,28 @@ class ProfilePage extends StatelessWidget {
               context,
               Icons.star_half_outlined,
               'Reviews',
-              () {
-                Navigator.pushNamed(context, '/review');
-              },
+              () => Navigator.pushNamed(context, '/review'),
               iconSize: 21.0,
             ),
             _buildBottomNavItem(
               context,
               Icons.home,
               'Home',
-              () {
-                Navigator.pushNamed(context, '/');
-              },
+              () => Navigator.pushNamed(context, '/main'),
               iconSize: 21.0,
             ),
             _buildBottomNavItem(
               context,
               Icons.qr_code,
               'QR Code',
-              () {
-                _showQRCodeModal(context);
-              },
+              () => _showQRCodeModal(context),
               iconSize: 21.0,
             ),
             _buildBottomNavItem(
               context,
               Icons.notifications,
               'Notifications',
-              () {
-                Navigator.pushNamed(context, '/notifications');
-              },
+              () => Navigator.pushNamed(context, '/notifications'),
               iconSize: 21.0,
             ),
             _buildBottomNavItem(
@@ -92,7 +99,7 @@ class ProfilePage extends StatelessWidget {
               Icons.person,
               'Profile',
               () {
-                // Already on profile page, no navigation needed
+                // Already on profile page, do nothing
               },
               iconSize: 21.0,
             ),
@@ -103,22 +110,20 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildBottomNavItem(
-      BuildContext context, IconData iconData, String label, VoidCallback onTap,
-      {double iconSize = 24.0}) {
+    BuildContext context,
+    IconData iconData,
+    String label,
+    VoidCallback onTap, {
+    double iconSize = 24.0,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(
-            iconData,
-            size: iconSize,
-          ),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 11),
-          ),
+          Icon(iconData, size: iconSize),
+          Text(label, style: const TextStyle(fontSize: 11)),
         ],
       ),
     );
@@ -139,15 +144,36 @@ class ProfilePage extends StatelessWidget {
   Widget _buildAccountTab() {
     return ListView(
       children: [
-        _buildListTile('My Rewards', 'Manage Points, bonuses, and streaks',
-            Icons.money_sharp, () {}),
         _buildListTile(
-            'Get Help', 'Need help with orders?', Icons.help_outline, () {}),
-        _buildListTile('Saved Stores', 'Check out your favorite stores',
-            Icons.store, () {}),
-        _buildListTile('Gift Card', 'Manage gift cards', Icons.payment, () {}),
-        _buildListTile('Privacy', 'Learn about Privacy and manage settings',
-            Icons.privacy_tip_outlined, () {}),
+          'My Rewards',
+          'Manage Points, bonuses, and streaks',
+          Icons.money_sharp,
+          () {},
+        ),
+        _buildListTile(
+          'Get Help',
+          'Need help with orders?',
+          Icons.help_outline,
+          () {},
+        ),
+        _buildListTile(
+          'Saved Stores',
+          'Check out your favorite stores',
+          Icons.store,
+          () {},
+        ),
+        _buildListTile(
+          'Gift Card',
+          'Manage gift cards',
+          Icons.payment,
+          () {},
+        ),
+        _buildListTile(
+          'Privacy',
+          'Learn about Privacy and manage settings',
+          Icons.privacy_tip_outlined,
+          () {},
+        ),
       ],
     );
   }
@@ -156,14 +182,24 @@ class ProfilePage extends StatelessWidget {
     return ListView(
       children: [
         _buildListTile(
-            'Manage Account',
-            'Update information and manage your account',
-            Icons.account_circle,
-            () {}),
-        _buildListTile('Payment', 'Manage Payment methods and credits',
-            Icons.payment, () {}),
-        _buildListTile('Rate Us', 'Leave us a review on the app store',
-            Icons.rate_review_outlined, () {}),
+          'Manage Account',
+          'Update information and manage your account',
+          Icons.account_circle,
+          () {},
+        ),
+        _buildListTile(
+          'Payment',
+          'Manage Payment methods and credits',
+          Icons.payment,
+          () {},
+        ),
+        _buildListTile(
+          'Rate Us',
+          'Leave us a review on the app store',
+          Icons.rate_review_outlined,
+          () {},
+        ),
+        // Toggle theme
         _buildListTile(
           isDarkMode ? 'Light Mode' : 'Dark Mode',
           isDarkMode ? 'Switch to light mode' : 'Switch to dark mode',
@@ -175,51 +211,16 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildListTile(
-      String title, String subtitle, IconData icon, VoidCallback onTap) {
+    String title,
+    String subtitle,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return ListTile(
       leading: Icon(icon),
       title: Text(title),
       subtitle: Text(subtitle),
       onTap: onTap,
     );
-  }
-}
-
-class AppBarContent extends StatelessWidget {
-  const AppBarContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).appBarTheme.backgroundColor,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.menu, size: 13),
-            onPressed: () {
-              _showSettingsMenu(context);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.coffee, size: 13),
-            onPressed: () {
-              // Add your custom action here
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, size: 13),
-            onPressed: () {
-              // Add an empty onPressed callback to prevent the button from being disabled
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSettingsMenu(BuildContext context) {
-    // Show settings menu logic here
   }
 }

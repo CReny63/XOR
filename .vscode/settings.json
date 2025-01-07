@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/flutterapps/meta_verse/linux"
+    "cmake.sourceDirectory": "C:/flutterapps/meta_verse/linux",
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

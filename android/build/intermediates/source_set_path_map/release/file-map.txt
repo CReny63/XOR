@@ -1,0 +1,14 @@
+com.example.meta_verse-lifecycle-livedata-core-2.6.1-0 C:\Users\crren\.gradle\caches\transforms-3\1959e7666fb5bbce98880c92de858866\transformed\lifecycle-livedata-core-2.6.1\res
+com.example.meta_verse-jetified-lifecycle-livedata-core-ktx-2.6.1-1 C:\Users\crren\.gradle\caches\transforms-3\33c5ece3155b26e2ad20858010af5251\transformed\jetified-lifecycle-livedata-core-ktx-2.6.1\res
+com.example.meta_verse-jetified-lifecycle-livedata-ktx-2.6.1-2 C:\Users\crren\.gradle\caches\transforms-3\34f21dc631398bfa2154de7874d944db\transformed\jetified-lifecycle-livedata-ktx-2.6.1\res
+com.example.meta_verse-lifecycle-livedata-2.6.1-3 C:\Users\crren\.gradle\caches\transforms-3\46dcf6c91fac15774bb16e91a0880c2d\transformed\lifecycle-livedata-2.6.1\res
+com.example.meta_verse-lifecycle-viewmodel-2.6.1-4 C:\Users\crren\.gradle\caches\transforms-3\d14cd45e08f3e122ea8cbe765e19932e\transformed\lifecycle-viewmodel-2.6.1\res
+com.example.meta_verse-jetified-lifecycle-viewmodel-ktx-2.6.1-5 C:\Users\crren\.gradle\caches\transforms-3\f45f0ea3d5d074f8be1b732bb93721f4\transformed\jetified-lifecycle-viewmodel-ktx-2.6.1\res
+com.example.meta_verse-pngs-6 C:\flutterapps\meta_verse\android\build\generated\res\pngs\release
+com.example.meta_verse-resValues-7 C:\flutterapps\meta_verse\android\build\generated\res\resValues\release
+com.example.meta_verse-rs-8 C:\flutterapps\meta_verse\android\build\generated\res\rs\release
+com.example.meta_verse-mergeReleaseResources-9 C:\flutterapps\meta_verse\android\build\intermediates\incremental\release\mergeReleaseResources\merged.dir
+com.example.meta_verse-mergeReleaseResources-10 C:\flutterapps\meta_verse\android\build\intermediates\incremental\release\mergeReleaseResources\stripped.dir
+com.example.meta_verse-merged_res-11 C:\flutterapps\meta_verse\android\build\intermediates\merged_res\release
+com.example.meta_verse-main-12 C:\flutterapps\meta_verse\android\src\main\res
+com.example.meta_verse-release-13 C:\flutterapps\meta_verse\android\src\release\res

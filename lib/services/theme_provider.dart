@@ -1,47 +1,40 @@
+// lib/services/theme_provider.dart
+
 import 'package:flutter/material.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  bool _isDarkMode = false;
+  bool isDarkMode = false;
 
-  bool get isDarkMode => _isDarkMode;
-
-  ThemeData get currentTheme => _isDarkMode ? _darkTheme : _lightTheme;
+  ThemeData get currentTheme => isDarkMode ? darkTheme : lightTheme;
 
   void toggleTheme() {
-    _isDarkMode = !_isDarkMode;
+    isDarkMode = !isDarkMode;
     notifyListeners();
   }
 
-  ThemeData get _darkTheme => ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: const Color.fromARGB(255, 0, 0, 0),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 0, 0, 0),
-        cardColor: const Color.fromARGB(255, 0, 0, 0),
-        colorScheme: const ColorScheme.dark(
-          surface: Color.fromARGB(255, 0, 0, 0),
-        ),
+  // Define Light Theme
+  ThemeData get lightTheme => ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.orange,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.orange,
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        bottomAppBarTheme: const BottomAppBarTheme(
-          color: Color.fromARGB(255, 0, 0, 0),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.orange,
         ),
       );
 
-  ThemeData get _lightTheme => ThemeData(
-        brightness: Brightness.light,
-        primaryColor: const Color.fromARGB(255, 255, 255, 255),
-        scaffoldBackgroundColor: Colors.white,
-        cardColor: Colors.white,
-        colorScheme: const ColorScheme.light(
-          surface: Colors.white,
-        ),
+  // Define Dark Theme
+  ThemeData get darkTheme => ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.deepPurple,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: Colors.deepPurple,
+          iconTheme: IconThemeData(color: Colors.white),
         ),
-        bottomAppBarTheme: const BottomAppBarTheme(
-          color: Colors.white,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.deepPurple,
         ),
       );
 }

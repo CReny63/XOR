@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta_verse/services/splash2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'main.dart'; // Assuming HomePage is defined here
-//import 'services/splash.dart';
-import 'services/theme_provider.dart'; // Assuming ThemeProvider is defined here
+import '../services/splash2.dart'; // Update paths if needed
+import '../services/theme_provider.dart';
 
 class LoginPage extends StatefulWidget {
   final ThemeProvider themeProvider;
@@ -22,7 +20,15 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
-  // Load saved credentials
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  // -------------------------
+  //     LOAD / SAVE CREDS
+  // -------------------------
   Future<void> _loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     String? savedUsername = prefs.getString('username');
@@ -36,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Save credentials to SharedPreferences
   Future<void> _saveCredentials(
       String username, String password, String email) async {
     final prefs = await SharedPreferences.getInstance();
@@ -45,7 +50,9 @@ class _LoginPageState extends State<LoginPage> {
     await prefs.setString('email', email);
   }
 
-  // Handle Sign In
+  // -------------------------
+  //         SIGN IN
+  // -------------------------
   Future<void> _handleSignIn() async {
     final prefs = await SharedPreferences.getInstance();
     String? savedUsername = prefs.getString('username');
@@ -54,7 +61,8 @@ class _LoginPageState extends State<LoginPage> {
     if (savedUsername == null || savedPassword == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('No saved credentials. Please sign up first.')),
+          content: Text('No saved credentials. Please sign up first.'),
+        ),
       );
       return;
     }
@@ -64,13 +72,10 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Sign In Successful!')),
       );
-
-      // Navigate to SplashScreen (no need for nextPage)
+      // Navigate to Splash2
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => Splash2(),
-        ),
+        MaterialPageRoute(builder: (context) => Splash2()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -79,14 +84,19 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Validate password
+  // -------------------------
+  //       VALIDATE PWD
+  // -------------------------
   bool _validatePassword(String password) {
+    // Must be >= 7 chars, include digit & special char
     final passwordRegex =
         RegExp(r'^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d).{7,}$');
     return passwordRegex.hasMatch(password);
   }
 
-  // Show Sign-Up dialog
+  // -------------------------
+  //       SIGN UP DIALOG
+  // -------------------------
   void _showSignUpDialog() {
     final TextEditingController signUpUsernameController =
         TextEditingController();
@@ -100,18 +110,19 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return StatefulBuilder(
-          builder: (context, setState) {
+          builder: (context, setStateDialog) {
             return AlertDialog(
               title: const Text("Sign Up"),
               content: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // Profile Image Picker
                     GestureDetector(
                       onTap: () async {
                         final XFile? pickedFile = await _picker.pickImage(
                             source: ImageSource.gallery);
                         if (pickedFile != null) {
-                          setState(() {
+                          setStateDialog(() {
                             _image = File(pickedFile.path);
                           });
                         }
@@ -175,42 +186,51 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
+                    // Basic field checks
                     if (signUpUsernameController.text.isEmpty ||
                         emailController.text.isEmpty ||
                         signUpPasswordController.text.isEmpty ||
                         confirmPasswordController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text('All fields are required.')),
+                          content: Text('All fields are required.'),
+                        ),
                       );
                       return;
                     }
+                    // Password validation
                     if (!_validatePassword(signUpPasswordController.text)) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
-                            'Password must be at least 7 characters, include 1 digit and 1 special character.',
+                            'Password must be at least 7 characters, '
+                            'include 1 digit and 1 special character.',
                           ),
                         ),
                       );
                       return;
                     }
+                    // Confirm password match
                     if (signUpPasswordController.text !=
                         confirmPasswordController.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text('Passwords do not match.')),
+                          content: Text('Passwords do not match.'),
+                        ),
                       );
                       return;
                     }
+                    // Profile picture check
                     if (_image == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text('Please select a profile picture.')),
+                          content: Text('Please select a profile picture.'),
+                        ),
                       );
                       return;
                     }
 
+                    // Save user credentials
                     await _saveCredentials(
                       signUpUsernameController.text,
                       signUpPasswordController.text,
@@ -221,6 +241,8 @@ class _LoginPageState extends State<LoginPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Sign Up Successful!')),
                     );
+
+                    // Navigate to Splash2
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => Splash2()),
@@ -236,14 +258,21 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // -------------------------
+  //         BUILD UI
+  // -------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Gradient AppBar
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color.fromARGB(255, 188, 155, 142), Colors.brown],
+              colors: [
+                Color.fromARGB(255, 188, 155, 142),
+                Color.fromARGB(255, 120, 87, 65),
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -252,106 +281,130 @@ class _LoginPageState extends State<LoginPage> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
+
+      // Milk Tea-like background
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 188, 155, 142),
-              Color.fromARGB(255, 81, 54, 34),
+              Color.fromARGB(255, 219, 191, 167), // Lighter milk-tea shade
+              Color.fromARGB(255, 138, 103, 80), // Darker milk-tea shade
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+
+        // Use SingleChildScrollView + Center + Column for a consistent, centered layout
+        child: SingleChildScrollView(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 50),
-                TextField(
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // Add forgot password logic here
-                    },
-                    child: const Text(
-                      'Forgot Password?',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: _handleSignIn,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Container for username + password
+                  Container(
+                    width: 280, // narrower width
+                    padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white.withOpacity(0.75),
+                      borderRadius: BorderRadius.circular(12),
+                      border:
+                          Border.all(color: Colors.brown.shade300, width: 1),
                     ),
-                    child: const Text(
-                      'Sign-In',
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center,
+                    child: Column(
+                      children: [
+                        // Username
+                        TextField(
+                          controller: usernameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Username',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Password
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Forgot Password link
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              // Forgot password logic
+                            },
+                            child: const Text(
+                              'Forgot Password?',
+                              style: TextStyle(color: Colors.brown),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: _showSignUpDialog,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Text(
-                      'Sign-Up',
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center,
+
+                  // Gap between container and buttons
+                  const SizedBox(height: 20),
+
+                  // Sign-In Button
+                  SizedBox(
+                    width: 280,
+                    child: ElevatedButton(
+                      onPressed: _handleSignIn,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.brown.shade600,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        'Sign-In',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+
+                  // Sign-Up Button
+                  SizedBox(
+                    width: 280,
+                    child: ElevatedButton(
+                      onPressed: _showSignUpDialog,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.brown.shade300,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        'Sign-Up',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedCredentials();
   }
 }

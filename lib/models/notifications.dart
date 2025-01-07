@@ -36,7 +36,7 @@ class NotificationsPage extends StatelessWidget {
               Icons.home,
               'Home',
               () {
-                Navigator.pushNamed(context, '/'); // Navigate to the home page
+                Navigator.pushNamed(context, '/main'); // Navigate to the home page
               },
               iconSize: 21.0,
             ),

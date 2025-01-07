@@ -1,0 +1,8 @@
+com.example.meta_verse.app-pngs-0 C:\flutterapps\meta_verse\android\app\build\generated\res\pngs\debug
+com.example.meta_verse.app-resValues-1 C:\flutterapps\meta_verse\android\app\build\generated\res\resValues\debug
+com.example.meta_verse.app-rs-2 C:\flutterapps\meta_verse\android\app\build\generated\res\rs\debug
+com.example.meta_verse.app-mergeDebugResources-3 C:\flutterapps\meta_verse\android\app\build\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.meta_verse.app-mergeDebugResources-4 C:\flutterapps\meta_verse\android\app\build\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.meta_verse.app-merged_res-5 C:\flutterapps\meta_verse\android\app\build\intermediates\merged_res\debug
+com.example.meta_verse.app-debug-6 C:\flutterapps\meta_verse\android\app\src\debug\res
+com.example.meta_verse.app-main-7 C:\flutterapps\meta_verse\android\app\src\main\res
