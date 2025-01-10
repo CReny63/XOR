@@ -27,7 +27,7 @@ class AppBarContent extends StatelessWidget {
               color: Theme.of(context).appBarTheme.iconTheme?.color,
             ),
             onPressed: () {
-              _showSettingsMenu(context);
+             // _showSettingsMenu(context);
             },
           ),
           IconButton(
@@ -42,7 +42,7 @@ class AppBarContent extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(
-              Icons.settings_accessibility_outlined,
+              Icons.light_mode,
               size: 13,
               color: Theme.of(context).appBarTheme.iconTheme?.color,
             ),

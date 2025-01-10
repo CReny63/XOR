@@ -2,7 +2,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 // Uncomment if you need Flutter’s Gradle plugin explicitly:
-// apply plugin: 'dev.flutter.flutter-gradle-plugin'
+//apply plugin: 'dev.flutter.flutter-gradle-plugin'
 
 // Load local.properties for flutterVersionCode/flutterVersionName
 def localProperties = new Properties()
@@ -30,6 +30,7 @@ android {
         applicationId = "com.example.meta_verse"
         minSdk = 21
         targetSdk = 34
+        multiDexEnabled true
 
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -58,11 +59,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                           'proguard-rules.pro'
         }
+        // debug {
+        // minifyEnabled false
+        // useProguard false
+        //  }
     }
 }
 
 dependencies {
-    // Add any dependencies your Android module needs
+    implementation 'androidx.multidex:multidex:2.0.1'
+     // Add AndroidX lifecycle dependencies
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
 }
 
 // If you want to ensure Kotlin 1.8 compilation:

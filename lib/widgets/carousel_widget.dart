@@ -19,7 +19,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
   final List<String> _images = [
     'assets/nintai_tea.png',
     'assets/serenitea.png',
-    'assets/share_tea.png',
+    'assets/ST_wintermelon.png',
     'assets/vivi_tea.png',
     'assets/tea_amo.png',
   ];

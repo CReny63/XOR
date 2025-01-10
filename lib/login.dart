@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   File? _image;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
+  //final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -119,13 +119,13 @@ class _LoginPageState extends State<LoginPage> {
                     // Profile Image Picker
                     GestureDetector(
                       onTap: () async {
-                        final XFile? pickedFile = await _picker.pickImage(
-                            source: ImageSource.gallery);
-                        if (pickedFile != null) {
-                          setStateDialog(() {
-                            _image = File(pickedFile.path);
-                          });
-                        }
+                        // final XFile? pickedFile = await _picker.pickImage(
+                        //     source: ImageSource.gallery);
+                        // if (pickedFile != null) {
+                        //   setStateDialog(() {
+                        //     _image = File(pickedFile.path);
+                        //   });
+                        // }
                       },
                       child: CircleAvatar(
                         radius: 40,

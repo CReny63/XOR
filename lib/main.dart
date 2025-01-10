@@ -2,7 +2,12 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:meta_verse/models/reviews.dart' as review;
+import 'package:meta_verse/user.dart';
+import 'package:meta_verse/widgets/promo.dart';
+import 'package:meta_verse/widgets/social_media.dart';
 import 'package:provider/provider.dart';
 
 // Import your widgets/models
@@ -24,6 +29,14 @@ import 'widgets/carousel_widget.dart'; // <--- We'll create this new widget
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Hive for Flutter
+  await Hive.initFlutter();
+
+  // Register adapters if you haven't yet
+  Hive.registerAdapter(UserAdapter());
 
   runApp(
     MultiProvider(
@@ -55,17 +68,18 @@ class MyApp extends StatelessWidget {
                   themeProvider:
                       Provider.of<ThemeProvider>(context, listen: false),
                 ),
-            '/main': (context) => const HomePage(),
+            '/main': (context) => HomePage(toggleTheme: themeProvider.toggleTheme,
+                isDarkMode: themeProvider.isDarkMode,),
             '/review': (context) => const review.ReviewsPage(),
             '/notifications': (context) => const NotificationsPage(),
             '/profile': (context) {
-    // We can safely read the provider here, since we are under MultiProvider
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    return ProfilePage(
-      toggleTheme: themeProvider.toggleTheme, 
-      isDarkMode: themeProvider.isDarkMode,
-    );
-  },
+              // We can safely read the provider here, since we are under MultiProvider
+              final themeProvider = Provider.of<ThemeProvider>(context);
+              return ProfilePage(
+                toggleTheme: themeProvider.toggleTheme,
+                isDarkMode: themeProvider.isDarkMode,
+              );
+            },
             // Add other routes here if needed
           },
           debugShowCheckedModeBanner: false,
@@ -76,7 +90,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required bool isDarkMode, required void Function() toggleTheme});
 
   // Keep the same greeting and date functions
   String getGreeting() {
@@ -130,7 +144,7 @@ class HomePage extends StatelessWidget {
               Text(
                 greeting,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 21,
                   color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontFamily: 'Roboto',
                 ),
@@ -139,7 +153,7 @@ class HomePage extends StatelessWidget {
               Text(
                 currentDate,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
@@ -172,20 +186,29 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: CustomPaint(
-                      painter: EarthPainter(),
-                      child: Container(),
-                    ),
+                    // child: CustomPaint(
+                    //   painter: EarthPainter(),
+                    //   child: Container(),
+                    // ),
                   ),
                   bobaStores: bobaStores,
                 ),
               ),
 
               // Some extra space before the carousel
-              const SizedBox(height: 50),
+              const SizedBox(height: 100),
 
-              // -------------- NEW CAROUSEL WIDGET HERE --------------
               const CarouselWidget(),
+
+              const SizedBox(height: 120), // Add spacing if desired
+
+              const PromoBanner(),
+
+               const SizedBox(height: 30), 
+              
+              const SocialMediaLinks(),
+
+              const SizedBox(height: 30), 
               // ------------------------------------------------------
             ],
           ),
@@ -282,66 +305,67 @@ class NotificationsPage extends StatelessWidget {
 }
 
 // Updated EarthPainter (no changes needed for the carousel addition)
-class EarthPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint greenPaint = Paint()
-      ..color = Colors.green.shade900
-      ..style = PaintingStyle.fill;
-    final Paint bluePaint = Paint()
-      ..color = Colors.blue.shade900
-      ..style = PaintingStyle.fill;
+// class EarthPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final Paint greenPaint = Paint()
+//       ..color = Colors.green.shade900
+//       ..style = PaintingStyle.fill;
+//     final Paint bluePaint = Paint()
+//       ..color = Colors.blue.shade900
+//       ..style = PaintingStyle.fill;
 
-    // Continents
-    Path continent1 = Path();
-    continent1.moveTo(size.width * 0.15, size.height * 0.25);
-    continent1.lineTo(size.width * 0.25, size.height * 0.2);
-    continent1.lineTo(size.width * 0.38, size.height * 0.27);
-    continent1.lineTo(size.width * 0.3, size.height * 0.38);
-    continent1.close();
+//     // Continents
+//     Path continent1 = Path();
+//     continent1.moveTo(size.width * 0.15, size.height * 0.25);
+//     continent1.lineTo(size.width * 0.25, size.height * 0.2);
+//     continent1.lineTo(size.width * 0.38, size.height * 0.27);
+//     continent1.lineTo(size.width * 0.3, size.height * 0.38);
+//     continent1.close();
 
-    Path continent2 = Path();
-    continent2.moveTo(size.width * 0.62, size.height * 0.48);
-    continent2.lineTo(size.width * 0.68, size.height * 0.42);
-    continent2.lineTo(size.width * 0.82, size.height * 0.48);
-    continent2.lineTo(size.width * 0.75, size.height * 0.58);
-    continent2.close();
+//     Path continent2 = Path();
+//     continent2.moveTo(size.width * 0.62, size.height * 0.48);
+//     continent2.lineTo(size.width * 0.68, size.height * 0.42);
+//     continent2.lineTo(size.width * 0.82, size.height * 0.48);
+//     continent2.lineTo(size.width * 0.75, size.height * 0.58);
+//     continent2.close();
 
-    Path continent3 = Path();
-    continent3.moveTo(size.width * 0.38, size.height * 0.68);
-    continent3.lineTo(size.width * 0.48, size.height * 0.63);
-    continent3.lineTo(size.width * 0.58, size.height * 0.68);
-    continent3.lineTo(size.width * 0.52, size.height * 0.78);
-    continent3.close();
+//     Path continent3 = Path();
+//     continent3.moveTo(size.width * 0.38, size.height * 0.68);
+//     continent3.lineTo(size.width * 0.48, size.height * 0.63);
+//     continent3.lineTo(size.width * 0.58, size.height * 0.68);
+//     continent3.lineTo(size.width * 0.52, size.height * 0.78);
+//     continent3.close();
 
-    // Draw land
-    canvas.drawPath(continent1, greenPaint);
-    canvas.drawPath(continent2, greenPaint);
-    canvas.drawPath(continent3, greenPaint);
+//     // Draw land
+//     canvas.drawPath(continent1, greenPaint);
+//     canvas.drawPath(continent2, greenPaint);
+//     canvas.drawPath(continent3, greenPaint);
 
-    // Lakes
-    Path lake1 = Path();
-    lake1.addOval(Rect.fromCircle(
-      center: Offset(size.width * 0.5, size.height * 0.5),
-      radius: size.width * 0.07,
-    ));
-    canvas.drawPath(lake1, bluePaint);
+//     // Lakes
+//     Path lake1 = Path();
+//     lake1.addOval(Rect.fromCircle(
+//       center: Offset(size.width * 0.5, size.height * 0.5),
+//       radius: size.width * 0.07,
+//     ));
+//     canvas.drawPath(lake1, bluePaint);
 
-    Path lake2 = Path();
-    lake2.addOval(Rect.fromCircle(
-      center: Offset(size.width * 0.35, size.height * 0.6),
-      radius: size.width * 0.045,
-    ));
-    canvas.drawPath(lake2, bluePaint);
+//     Path lake2 = Path();
+//     lake2.addOval(Rect.fromCircle(
+//       center: Offset(size.width * 0.35, size.height * 0.6),
+//       radius: size.width * 0.045,
+//     ));
+//     canvas.drawPath(lake2, bluePaint);
 
-    Path lake3 = Path();
-    lake3.addOval(Rect.fromCircle(
-      center: Offset(size.width * 0.65, size.height * 0.4),
-      radius: size.width * 0.05,
-    ));
-    canvas.drawPath(lake3, bluePaint);
-  }
+//     Path lake3 = Path();
+//     lake3.addOval(Rect.fromCircle(
+//       center: Offset(size.width * 0.65, size.height * 0.4),
+//       radius: size.width * 0.05,
+//     ));
+//     canvas.drawPath(lake3, bluePaint);
+//   }
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
+//   @override
+//   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+// }
+ 

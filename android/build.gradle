@@ -1,21 +1,45 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
-    ext.kotlin_version = '1.7.10'  // Updated Kotlin version
+    // Use the same Kotlin version that matches your AGP
+    ext.kotlin_version = '1.8.10'
+
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
+        // gradlePluginPortal() if needed
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.4.2"  // Updated AGP version
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // Kotlin plugin
-        //classpath "dev.flutter:flutter-gradle-plugin:1.0.0" // Flutter plugin (keep commented out)
+        classpath "com.android.tools.build:gradle:7.4.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // Optionally, if you had a reason to use the Flutter Gradle plugin:
+        // classpath "dev.flutter:flutter-gradle-plugin:1.0.0"
     }
 }
 
+// New approach for subprojects
 allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()  // Optional, if using libraries that still reference jcenter
+        // jcenter() only if absolutely necessary
     }
+}
+
+rootProject.buildDir = "../build"
+
+subprojects {
+    // Each subproject’s build dir
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+// Ensure the :app module is evaluated first
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+// Create a custom `clean` task that nukes the entire build output
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
 }

@@ -16,7 +16,7 @@ class BobaStore {
 List<BobaStore> bobaStores = [
   BobaStore(
     name: 'Share Tea',
-    imageName: 'share_tea',
+    imageName: 'sharetealogo',
     qrData: 'https://www.meta-verse.com/store/share_tea',
   ),
   BobaStore(
@@ -56,7 +56,7 @@ List<BobaStore> bobaStores = [
   ),
   BobaStore(
     name: 'Ding Tea',
-    imageName: 'ding_tea',
+    imageName: 'dingtealogo',
     qrData: 'https://www.meta-verse.com/store/ding_tea',
   ),
 ];

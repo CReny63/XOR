@@ -42,7 +42,7 @@ class CircularLayout extends StatelessWidget {
   Widget _buildPositionedBobaStore(
       BuildContext context, int index, double angleIncrement) {
     // Increase orbit for spacing between circles
-    final double orbitRadius = radius * 1.2;
+    final double orbitRadius = radius * 1.5;
     final double angle = angleIncrement * index - pi / 2; // Start from top
 
     // Compute (x, y) based on orbit radius and current angle
@@ -78,7 +78,7 @@ class CircularLayout extends StatelessWidget {
               ],
             ),
             child: CircleAvatar(
-              radius: 25, // Boba store icon size
+              radius: 30, // Boba store icon size
               backgroundImage: AssetImage(
                 'assets/${bobaStores[index].imageName}.png',
               ),
