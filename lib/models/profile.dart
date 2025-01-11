@@ -62,72 +62,63 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).colorScheme.surface,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _buildBottomNavItem(
-              context,
-              Icons.star_half_outlined,
-              'Reviews',
-              () => Navigator.pushNamed(context, '/review'),
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.home,
-              'Home',
-              () => Navigator.pushNamed(context, '/main'),
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.qr_code,
-              'QR Code',
-              () => _showQRCodeModal(context),
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.notifications,
-              'Notifications',
-              () => Navigator.pushNamed(context, '/notifications'),
-              iconSize: 21.0,
-            ),
-            _buildBottomNavItem(
-              context,
-              Icons.person,
-              'Profile',
-              () {
-                // Already on profile page, do nothing
-              },
-              iconSize: 21.0,
-            ),
-          ],
-        ),
+  color: Theme.of(context).colorScheme.surface,
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: <Widget>[
+      IconButton(
+        icon: const Icon(Icons.star_half_outlined, size: 21.0),
+        tooltip: 'Reviews',
+        onPressed: () => Navigator.pushNamed(context, '/review'),
       ),
+      IconButton(
+        icon: const Icon(Icons.home, size: 21.0),
+        tooltip: 'Home',
+        onPressed: () => Navigator.pushNamed(context, '/main'),
+      ),
+      IconButton(
+        icon: const Icon(Icons.qr_code, size: 21.0),
+        tooltip: 'QR Code',
+        onPressed: () => _showQRCodeModal(context),
+      ),
+      IconButton(
+        icon: const Icon(Icons.notifications, size: 21.0),
+        tooltip: 'Notifications',
+        onPressed: () => Navigator.pushNamed(context, '/notifications'),
+      ),
+      IconButton(
+        icon: const Icon(Icons.person, size: 21.0),
+        tooltip: 'Profile',
+        onPressed: () {
+          // Handle profile tap action or navigation
+        },
+      ),
+    ],
+  ),
+),
+
     );
   }
 
-  Widget _buildBottomNavItem(
-    BuildContext context,
-    IconData iconData,
-    String label,
-    VoidCallback onTap, {
-    double iconSize = 24.0,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(iconData, size: iconSize),
-          Text(label, style: const TextStyle(fontSize: 11)),
-        ],
-      ),
-    );
-  }
+  // Widget _buildBottomNavItem(
+  //   BuildContext context,
+  //   IconData iconData,
+  //   String label,
+  //   VoidCallback onTap, {
+  //   double iconSize = 24.0,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: <Widget>[
+  //         Icon(iconData, size: iconSize),
+  //         Text(label, style: const TextStyle(fontSize: 11)),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void _showQRCodeModal(BuildContext context) {
     showDialog(

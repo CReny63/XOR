@@ -65,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen>
               FadeTransition(
                 opacity: _fadeAnimation,
                 child: const Text(
-                  "metaV",
+                  "BOPO",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,

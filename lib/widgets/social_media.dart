@@ -23,21 +23,24 @@ class SocialMediaLinks extends StatelessWidget {
       children: [
         IconButton(
           icon: const FaIcon(FontAwesomeIcons.instagram),  // Instagram icon
-          color: const Color.fromARGB(255, 0, 0, 0),
+         color:
+            Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () => _launchURL(instagramUrl),
           tooltip: 'Instagram',
         ),
         IconButton(
           selectedIcon: const SizedBox(width: 20), // Adjust width as needed
           icon: const FaIcon(FontAwesomeIcons.facebook),  // Facebook icon
-          color: const Color.fromARGB(255, 0, 0, 0),
+         color:
+            Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () => _launchURL(facebookUrl),
           tooltip: 'Facebook',
         ),
         IconButton(
           selectedIcon: const SizedBox(width: 20), // Adjust width as needed
           icon: const Icon(Icons.email),  // Use default email icon for Gmail
-          color: const Color.fromARGB(255, 0, 0, 0),
+          color:
+            Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () => _launchURL(gmailUrl),
           tooltip: 'Email Us!',
         ),

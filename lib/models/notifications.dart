@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:meta_verse/widgets/app_bar_content.dart';
 
 class NotificationsPage extends StatelessWidget {
-  const NotificationsPage({super.key});
+  final VoidCallback toggleTheme;
+  final bool isDarkMode;
+
+  const NotificationsPage({
+    super.key,
+    required this.toggleTheme,
+    required this.isDarkMode,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(75), // Adjust height as needed
-        child: AppBarContent(), // Same AppBarContent as HomePage
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(75), 
+        child: AppBarContent(
+          toggleTheme: toggleTheme,
+          isDarkMode: isDarkMode,
+        ),
       ),
-      backgroundColor:
-          const Color.fromARGB(255, 255, 255, 255), // Main background color
-
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: const Center(
-        child: Text('noti Content Here'), // Add your review page content here
+        child: Text('noti Content Here'),
       ),
-
       bottomNavigationBar: BottomAppBar(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: Theme.of(context).colorScheme.surface,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -26,27 +34,21 @@ class NotificationsPage extends StatelessWidget {
               context,
               Icons.star_half_outlined,
               'Reviews',
-              () {
-                Navigator.pushNamed(context, '/review'); // Navigate to the home page
-              },
+              () => Navigator.pushNamed(context, '/review'),
               iconSize: 21.0,
             ),
             _buildBottomNavItem(
               context,
               Icons.home,
               'Home',
-              () {
-                Navigator.pushNamed(context, '/main'); // Navigate to the home page
-              },
+              () => Navigator.pushNamed(context, '/main'),
               iconSize: 21.0,
             ),
             _buildBottomNavItem(
               context,
               Icons.qr_code,
               'QR Code',
-              () {
-                _showQRCodeModal(context);
-              },
+              () => _showQRCodeModal(context),
               iconSize: 21.0,
             ),
             _buildBottomNavItem(
@@ -54,7 +56,7 @@ class NotificationsPage extends StatelessWidget {
               Icons.notifications,
               'Notifications',
               () {
-                // Handle notifications button tap
+                // Currently on Notifications, refresh or do nothing
               },
               iconSize: 21.0,
             ),
@@ -62,9 +64,7 @@ class NotificationsPage extends StatelessWidget {
               context,
               Icons.person,
               'Profile',
-              () {
-                Navigator.pushNamed(context, '/profile'); // Navigate to the home page
-              },
+              () => Navigator.pushNamed(context, '/profile'),
               iconSize: 21.0,
             ),
           ],
@@ -74,23 +74,25 @@ class NotificationsPage extends StatelessWidget {
   }
 
   Widget _buildBottomNavItem(
-      BuildContext context, IconData iconData, String label, VoidCallback onTap,
-      {double iconSize = 24.0}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            iconData,
-            size: iconSize,
+      BuildContext context,
+      IconData iconData,
+      String tooltipMessage,
+      VoidCallback onTap, {
+        double iconSize = 24.0,
+      }) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Tooltip(
+            message: tooltipMessage,
+            child: Icon(
+              iconData,
+              size: iconSize,
+            ),
           ),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 11),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -105,46 +107,5 @@ class NotificationsPage extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-class AppBarContent extends StatelessWidget {
-  const AppBarContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromARGB(
-          255, 255, 255, 255), // Set the background color here
-      padding:
-          const EdgeInsets.symmetric(horizontal: 12), // Optional: Add padding
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.menu, size: 13, color: Colors.black),
-            onPressed: () {
-              _showSettingsMenu(context);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.coffee, size: 13, color: Colors.black),
-            onPressed: () {
-              // Add your custom action here
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, size: 13, color: Colors.black),
-            onPressed: () {
-              // Add an empty onPressed callback to prevent the button from being disabled
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSettingsMenu(BuildContext context) {
-    // Show settings menu logic here
   }
 }

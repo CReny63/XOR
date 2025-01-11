@@ -6,20 +6,26 @@ class PromoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Retrieve the desired theme color or fallback to black if null
+    final Color themeColor = Theme.of(context).floatingActionButtonTheme.backgroundColor ?? Colors.black;
+
     return Container(
-      // Use decoration to add background color and rounded corners
       decoration: BoxDecoration(
-        color: const Color(0xFF4E342E), // Your brown color
-        borderRadius: BorderRadius.circular(12.0), // Adjust radius as needed
+        color: Colors.transparent,
+        border: Border.all(
+          color: themeColor, // Use the resolved theme color
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(4.0),
       ),
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
-      child: const Text(
-        "The Right way to buy boba. Check out our socials and give us a follow to stay up to date on new rewards and updates!",
+      child: Text(
+        "The Right way to buy boba. Check out our socials to stay up to date on rewards & updates!",
         style: TextStyle(
-          fontFamily: 'Roboto', // Use a clean font like Roboto
+          fontFamily: 'Roboto',
           fontSize: 14,
-          color: Colors.white,
+          color: themeColor, // Use the same resolved theme color
         ),
         textAlign: TextAlign.center,
       ),

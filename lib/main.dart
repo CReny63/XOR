@@ -11,6 +11,7 @@ import 'package:meta_verse/widgets/social_media.dart';
 import 'package:provider/provider.dart';
 
 // Import your widgets/models
+import 'models/notifications.dart' as notifications;
 import 'widgets/circular_layout.dart';
 import 'widgets/app_bar_content.dart';
 import 'widgets/chatbot_popup.dart';
@@ -21,17 +22,13 @@ import 'models/user_admin_page.dart';
 import 'services/splash.dart';
 import 'services/splash2.dart';
 import 'models/profile.dart';
-
-// --------------
-//    NEW IMPORT
-// --------------
 import 'widgets/carousel_widget.dart'; // <--- We'll create this new widget
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-   WidgetsFlutterBinding.ensureInitialized();
-  
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Initialize Hive for Flutter
   await Hive.initFlutter();
 
@@ -68,10 +65,24 @@ class MyApp extends StatelessWidget {
                   themeProvider:
                       Provider.of<ThemeProvider>(context, listen: false),
                 ),
-            '/main': (context) => HomePage(toggleTheme: themeProvider.toggleTheme,
-                isDarkMode: themeProvider.isDarkMode,),
-            '/review': (context) => const review.ReviewsPage(),
-            '/notifications': (context) => const NotificationsPage(),
+            '/main': (context) => HomePage(
+                  toggleTheme: themeProvider.toggleTheme,
+                  isDarkMode: themeProvider.isDarkMode,
+                ),
+            '/review': (context) {
+              final themeProvider = Provider.of<ThemeProvider>(context);
+              return review.ReviewsPage(
+                toggleTheme: themeProvider.toggleTheme,
+                isDarkMode: themeProvider.isDarkMode,
+              );
+            },
+            '/notifications': (context) {
+              final themeProvider = Provider.of<ThemeProvider>(context);
+              return notifications.NotificationsPage(
+                toggleTheme: themeProvider.toggleTheme,
+                isDarkMode: themeProvider.isDarkMode,
+              );
+            },
             '/profile': (context) {
               // We can safely read the provider here, since we are under MultiProvider
               final themeProvider = Provider.of<ThemeProvider>(context);
@@ -90,7 +101,10 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required bool isDarkMode, required void Function() toggleTheme});
+  const HomePage(
+      {super.key,
+      required bool isDarkMode,
+      required void Function() toggleTheme});
 
   // Keep the same greeting and date functions
   String getGreeting() {
@@ -159,7 +173,7 @@ class HomePage extends StatelessWidget {
               ),
 
               // Space so text doesn't overlap with circle
-              const SizedBox(height: 150),
+              const SizedBox(height: 100),
 
               // Center the circular layout
               Center(
@@ -204,11 +218,11 @@ class HomePage extends StatelessWidget {
 
               const PromoBanner(),
 
-               const SizedBox(height: 30), 
-              
+              const SizedBox(height: 30),
+
               const SocialMediaLinks(),
 
-              const SizedBox(height: 30), 
+              const SizedBox(height: 30),
               // ------------------------------------------------------
             ],
           ),
@@ -247,7 +261,7 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.home, size: 21.0),
             onPressed: () {
-              Navigator.pushNamed(context, '/main');
+              // Navigator.pushNamed(context, '/main');
             },
             tooltip: 'Home',
           ),
@@ -287,19 +301,6 @@ class QRCodePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('QR Code')),
       body: const Center(child: Text('QR Code Page')),
-    );
-  }
-}
-
-class NotificationsPage extends StatelessWidget {
-  const NotificationsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // Implement your Notifications Page here
-    return Scaffold(
-      appBar: AppBar(title: const Text('Notifications')),
-      body: const Center(child: Text('Notifications Page')),
     );
   }
 }
@@ -368,4 +369,3 @@ class NotificationsPage extends StatelessWidget {
 //   @override
 //   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 // }
- 

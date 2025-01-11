@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Add this for formatting the date
+import 'package:intl/intl.dart'; // For formatting the date
+import 'package:meta_verse/widgets/app_bar_content.dart'; // Custom AppBarContent
 
 class ReviewsPage extends StatefulWidget {
-  const ReviewsPage({super.key});
+  final VoidCallback toggleTheme;
+  final bool isDarkMode;
+
+  const ReviewsPage({
+    super.key,
+    required this.toggleTheme,
+    required this.isDarkMode,
+  });
 
   @override
   _ReviewsPageState createState() => _ReviewsPageState();
@@ -11,17 +19,25 @@ class ReviewsPage extends StatefulWidget {
 class _ReviewsPageState extends State<ReviewsPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
+  
   int _rating = 0;
   List<Map<String, dynamic>> _reviews = [];
 
   @override
   Widget build(BuildContext context) {
+    // Use themeColor from current theme for title text
+    final Color themeColor =
+        Theme.of(context).floatingActionButtonTheme.backgroundColor ?? Colors.black;
+
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(65),
-        child: AppBarContent(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(75),
+        child: AppBarContent(
+          toggleTheme: widget.toggleTheme,
+          isDarkMode: widget.isDarkMode,
+        ),
       ),
-      backgroundColor: const Color.fromARGB(255, 206, 189, 152), // Coffee brown background
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -29,71 +45,76 @@ class _ReviewsPageState extends State<ReviewsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Title Section
-              const Text(
+              Text(
                 'Reviews',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: themeColor,
                 ),
               ),
               const SizedBox(height: 20),
 
-              // Name input field
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  labelStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                  filled: true,
-                  fillColor: Colors.white70,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 10),
-
+              
               // Rating input section
-              Row(
-                children: [
-                  const Text(
-                    'Rating: ',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                  ...List.generate(5, (index) {
-                    return IconButton(
-                      icon: Icon(
-                        Icons.star,
-                        color: _rating > index ? const Color.fromARGB(255, 0, 0, 0) : Colors.grey,
-                      ),
-                      onPressed: () => setState(() {
-                        _rating = index + 1;
-                      }),
-                    );
-                  }),
-                ],
-              ),
-              const SizedBox(height: 10),
+    Center(
+  child: Row(
+    mainAxisSize: MainAxisSize.min,  // Row occupies minimal horizontal space
+    children: [
+      const Text(
+        'Rating: ',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+      ...List.generate(5, (index) {
+        return IconButton(
+          icon: Icon(
+            Icons.star,
+            color: _rating > index ? Colors.black : Colors.grey,
+          ),
+          onPressed: () {
+            setState(() {
+              _rating = index + 1;
+            });
+          },
+        );
+      }),
+    ],
+  ),
+),
 
-              // Textfield for the comment
-              TextField(
-                controller: _commentController,
-                decoration: const InputDecoration(
-                  labelText: 'Leave your feedback...',
-                  labelStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                  filled: true,
-                  fillColor: Colors.white70,
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-              ),
+const SizedBox(height: 10),
+
+
+
+              // Comment input field
+           // Wrap the comment TextField with a Container or SizedBox
+SizedBox(
+  width: 250,   // Set desired width
+  height: 100,  // Set desired height (optional for multi-line inputs)
+  child: TextField(
+    controller: _commentController,
+    decoration: const InputDecoration(
+      labelText: 'Leave your feedback...',
+      labelStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+      filled: true,
+      fillColor: Colors.white70,
+      border: OutlineInputBorder(),
+    ),
+    maxLines: 3,
+  ),
+),
+const SizedBox(height: 10),
+
               const SizedBox(height: 20),
 
               // Submit button
               ElevatedButton(
                 onPressed: () {
-                  if (_rating > 0 && _commentController.text.isNotEmpty && _nameController.text.isNotEmpty) {
+                  if (_rating > 0 &&
+                      _commentController.text.isNotEmpty &&
+                      _nameController.text.isNotEmpty) {
                     final now = DateTime.now();
-                    final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(now); // Formatting date
+                    final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(now);
                     setState(() {
                       _reviews.add({
                         'name': _nameController.text,
@@ -108,16 +129,21 @@ class _ReviewsPageState extends State<ReviewsPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.orange, // Text color
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.orange,
                 ),
                 child: const Text('Submit Review'),
               ),
               const SizedBox(height: 20),
 
-              // Displaying all reviews
+              // All Reviews header
               const Text(
                 'All Reviews',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
               Expanded(
                 child: ListView.builder(
@@ -168,80 +194,40 @@ class _ReviewsPageState extends State<ReviewsPage> {
           ),
         ),
       ),
-  bottomNavigationBar: BottomAppBar(
-  color: const Color.fromARGB(255, 255, 255, 255), // White color
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: <Widget>[
-      _buildBottomNavItem(
-        context,
-        Icons.star_half_outlined,
-        'Reviews', // Tooltip text
-        () {},
-        iconSize: 21.0,
-      ),
-      _buildBottomNavItem(
-        context,
-        Icons.home,
-        'Home', // Tooltip text
-        () {
-          Navigator.pushNamed(context, '/main');
-        },
-        iconSize: 21.0,
-      ),
-      _buildBottomNavItem(
-        context,
-        Icons.qr_code,
-        'QR Code', // Tooltip text
-        () {
-          _showQRCodeModal(context);
-        },
-        iconSize: 21.0,
-      ),
-      _buildBottomNavItem(
-        context,
-        Icons.notifications,
-        'Notifications', // Tooltip text
-        () {
-          Navigator.pushNamed(context, '/notifications');
-        },
-        iconSize: 21.0,
-      ),
-      _buildBottomNavItem(
-        context,
-        Icons.person,
-        'Profile', // Tooltip text
-        () {
-          Navigator.pushNamed(context, '/profile');
-        },
-        iconSize: 21.0,
-      ),
-    ],
-  ),
-),
-
-    );
-  }
-
-  Widget _buildBottomNavItem(
-    BuildContext context, IconData iconData, String label, VoidCallback onTap, {
-    double iconSize = 24.0,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            iconData,
-            size: iconSize,
-          ),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 11),
-          ),
-        ],
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).colorScheme.surface,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.star_half_outlined, size: 21.0),
+              tooltip: 'Reviews',
+              onPressed: () {
+                // Already on Reviews
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.home, size: 21.0),
+              tooltip: 'Home',
+              onPressed: () => Navigator.pushNamed(context, '/main'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.qr_code, size: 21.0),
+              tooltip: 'QR Code',
+              onPressed: () => _showQRCodeModal(context),
+            ),
+            IconButton(
+              icon: const Icon(Icons.notifications, size: 21.0),
+              tooltip: 'Notifications',
+              onPressed: () => Navigator.pushNamed(context, '/notifications'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.person, size: 21.0),
+              tooltip: 'Profile',
+              onPressed: () => Navigator.pushNamed(context, '/profile'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -256,40 +242,5 @@ class _ReviewsPageState extends State<ReviewsPage> {
         );
       },
     );
-  }
-}
-
-class AppBarContent extends StatelessWidget {
-  const AppBarContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromARGB(255, 255, 255, 255), // Coffee brown color for AppBar
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.menu, size: 13, color: Color.fromARGB(255, 0, 0, 0)),
-            onPressed: () {
-              _showSettingsMenu(context);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.coffee, size: 13, color: Color.fromARGB(255, 0, 0, 0)),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, size: 13, color: Color.fromARGB(255, 0, 0, 0)),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSettingsMenu(BuildContext context) {
-    // Show settings menu logic here
   }
 }

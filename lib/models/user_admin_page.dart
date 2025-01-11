@@ -40,7 +40,7 @@ class UserAdminPage extends StatelessWidget {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.4,
-                  height: 600,
+                  height: 500,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [
@@ -83,7 +83,7 @@ class UserAdminPage extends StatelessWidget {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.4,
-                  height: 600,
+                  height: 500,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [
@@ -132,7 +132,8 @@ class UserAdminPage extends StatelessWidget {
           );
         },
         child: const Icon(Icons.chat),
-        backgroundColor: Colors.blue,
+         backgroundColor:
+            Theme.of(context).floatingActionButtonTheme.backgroundColor,
       ),
     );
   }

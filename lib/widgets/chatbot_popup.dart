@@ -18,8 +18,8 @@ class _ChatbotPopupState extends State<ChatbotPopup> {
     return AlertDialog(
       title: const Text('Bart'),
       content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,  // Adjust to your preference
-        height: MediaQuery.of(context).size.height * 0.5, // Adjust to your preference
+        width: MediaQuery.of(context).size.width * 0.6,  // Adjust to your preference
+        height: MediaQuery.of(context).size.height * 0.4, // Adjust to your preference
         child: Column(
           children: [
             // Display conversation history
